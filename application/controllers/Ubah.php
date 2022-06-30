@@ -108,17 +108,17 @@ class Ubah extends MY_Controller
             $id_user = $this->session->userdata('id');
             $nama = $this->input->post('nama');
             $namalama = $this->input->post('namalama');
-            $valid = $this->User_model->validUsername($namalama);
+            $valid = $this->Project_model->validProject($namalama);
 
             if ($nama == $namalama || $valid == 0) {
 
                 $data = array(
                     'nama' => htmlspecialchars($this->input->post('nama')),
-                    'id_user' => $id_user,
+                    'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
                     'keterangan' => htmlspecialchars($this->input->post('keterangan')),
 
                 );
-                $this->Project_model->update($data, ['id_user' => $this->encryptor->enkrip('dekrip', $id)]);
+                $this->Project_model->update($data, ['id_project' => $this->encryptor->enkrip('dekrip', $id)]);
                 echo json_encode(array(
                     'status' => 1,
                     'csrfName' => $this->security->get_csrf_token_name(),
@@ -128,6 +128,45 @@ class Ubah extends MY_Controller
                 $json['status'] = 2;
                 $json['csrfHash'] = $this->security->get_csrf_hash();
                 $json['pesan']     = "Nama Project sudah terdaftar di database!";
+                echo json_encode($json);
+            }
+        } else {
+            $this->input_error();
+        }
+    }
+
+    public function objek_kriptografi()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_message('required', '%s harus diisi !');
+        $this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+        if ($this->form_validation->run() == TRUE) {
+            $id = $this->input->post('id_objek_kriptografi');
+            $id_project = $this->input->post('id_project');
+            $nama = $this->input->post('nama');
+            $namalama = $this->input->post('namalama');
+            $valid = $this->Objek_model->validObjek($namalama);
+
+            if ($nama == $namalama || $valid == 0) {
+
+                $data = array(
+                    'nama' => htmlspecialchars($this->input->post('nama')),
+                    'id_project' => $this->encryptor->enkrip('dekrip', $id_project),
+                    'keterangan' => htmlspecialchars($this->input->post('keterangan')),
+
+                );
+                $this->Objek_model->update($data, ['id_objek_kriptografi' => $this->encryptor->enkrip('dekrip', $id)]);
+                echo json_encode(array(
+                    'status' => 1,
+                    'csrfName' => $this->security->get_csrf_token_name(),
+                    'csrfHash' => $this->security->get_csrf_hash(),
+                ));
+            } else {
+                $json['status'] = 2;
+                $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['pesan']     = "Nama Objek sudah terdaftar di database!";
                 echo json_encode($json);
             }
         } else {

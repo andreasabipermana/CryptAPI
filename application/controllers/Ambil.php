@@ -34,4 +34,15 @@ class Ambil extends MY_Controller
 		);
 		echo json_encode($data);
 	}
+
+	public function getObjekById($id)
+	{
+		$id = $this->encryptor->enkrip('dekrip', $id);
+		$datas = $this->Objek_model->get($id, FALSE);
+		$data = array(
+			'nama' => $datas->nama,
+			'keterangan' => $datas->keterangan,
+		);
+		echo json_encode($data);
+	}
 }

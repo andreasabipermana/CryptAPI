@@ -34,4 +34,9 @@ class Site
     {
         return json_decode(json_encode($data), true);
     }
+
+    function be_Array2($data)
+    {
+        return json_decode(json_encode($data), true);
+    }
 }

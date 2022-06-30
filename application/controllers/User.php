@@ -12,9 +12,10 @@ class User extends MY_Controller
 
     public function index()
     {
+        $id_user = $this->session->userdata('id');
         $data = [
             'konten' => 'dashboard',
-            'getProjectCount' => $this->Project_model->count(),
+            'getProjectCount' => $this->Project_model->count(['id_user' => $id_user]),
             'getObjekCount' => $this->Objek_model->count(),
             'getKunciCount' => $this->Kunci_model->count(),
             'getEndpointCount' => $this->Endpoint_model->count()
@@ -33,13 +34,14 @@ class User extends MY_Controller
 
     public function objek_kriptografi($id = NULL)
     {
-        if ($this->uri->segment(2) == 'objek_kriptografi' && $this->uri->segment(3) == '') {
-            $id_project = $this->encryptor->enkrip('dekrip', $id);
+        if ($this->uri->segment(2) == 'objek_kriptografi' && $this->uri->segment(3) != '') {
+            $project = $this->Project_model->get($this->encryptor->enkrip('dekrip', $id), FALSE);
             $data = [
                 'konten' => 'objek_kriptografi',
                 'breadcrumb' => 'Objek Kriptografi',
                 'tabel' => 'objek_kriptografi',
-                'id_project' => $id_project
+                'id_project' => $id,
+                'nama_project' => $project->nama
 
             ];
             $this->load->view('user', $data);

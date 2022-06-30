@@ -8,8 +8,8 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Project Kriptografi</h3>
-                <p class="text-subtitle text-muted">Berisi Project Kriptografi yang disimpan oleh Sistem</p>
+                <h3>Object Kriptografi</h3>
+                <p class="text-subtitle text-muted">Berisi Object Kriptografi yang akan diamankan oleh Sistem</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -24,7 +24,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="text-center">Daftar Project</h4>
+                <h4 class="text-center">Daftar Object Kriptografi <br> Project <?= $nama_project ?></h4>
             </div>
             <br>
             <div class="card-body">
@@ -39,7 +39,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Project</th>
+                            <th>Nama Object</th>
                             <th>Keterangan</th>
                             <th>Aksi</th>
                         </tr>
@@ -68,19 +68,21 @@
                         value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs">
 
                     <input type="hidden" id="kode" name="kode" value="">
-                    <input type="hidden" id="id_project" name="id_project" value="">
+                    <input type="hidden" id="id_project" name="id_project" value="<?= $id_project ?>">
+                    <input type="hidden" name="id_objek_kriptografi" id="id_objek_kriptografi" value="">
 
                     <div class="row">
                         <div class="col-md-12" id="error-message">
 
                         </div>
                         <div class="col-md-12 form-group mb-4">
-                            <label>Nama Project</label>
+                            <label>Nama Objek Kriptografi</label>
                             <input type="text" class="form-control" name="nama" id="nama" onpaste="return false"
                                 autocomplete="off">
                             <input type="hidden" id="namalama" name="namalama" value="">
                             <div class="valid-feedback" style="display: block;color:grey">
-                                Info : <span class="badge bg-light-warning">Tidak boleh nama project yang sudah
+                                Info : <span class="badge bg-light-warning">Tidak boleh nama objek kriptografi yang
+                                    sudah
                                     ada</span>
                             </div>
                         </div>
@@ -113,6 +115,7 @@ var tabel = '<?= $tabel ?>';
 var breadcrumb = '<?= $breadcrumb ?>';
 var logs = '';
 var base = '<?= base_url() ?>'
+var id_project = '<?= $id_project ?>';
 
 $(function() {
 
@@ -157,7 +160,7 @@ $(function() {
         },
 
         ajax: {
-            url: base + "tabel/" + tabel,
+            url: base + "tabel/" + tabel + "/" + id_project,
             type: "GET",
             error: function() {
 
@@ -182,7 +185,7 @@ function tambah() {
 function ubah(id) {
     $('#formTambah')[0].reset();
     $.ajax({
-        url: base + 'ambil/getProjectById/' + id,
+        url: base + 'ambil/getObjekById/' + id,
         type: "GET",
         dataType: "JSON",
         success: function(json) {
@@ -192,7 +195,7 @@ function ubah(id) {
             $('#namalama').val(json.namalama);
             $('#keterangan').val(json.keterangan);
             $('#kode').val('1');
-            $('#id_project').val(id);
+            $('#id_objek_kriptografi').val(id);
             $('#modalTambah').modal('show');
 
 
@@ -207,9 +210,9 @@ function ubah(id) {
 
 function simpan() {
     if ($('#kode').val() == 0) {
-        var url = base + 'tambah/project';
+        var url = base + 'tambah/objek_kriptografi';
     } else {
-        var url = base + 'ubah/project';
+        var url = base + 'ubah/objek_kriptografi';
     }
     $.ajax({
         url: url,
@@ -254,10 +257,6 @@ function simpan() {
     });
 }
 
-function info(id) {
-    var url = base + 'User/objek_kriptografi/' + id;
-    location.href = url;
-}
 
 function hapus(id) {
 
@@ -279,7 +278,7 @@ function hapus(id) {
                 }
             });
             $.ajax({
-                url: base + '/hapus/project/' + id,
+                url: base + '/hapus/objek_kriptografi/' + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {

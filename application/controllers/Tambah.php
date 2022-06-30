@@ -98,11 +98,11 @@ class Tambah extends MY_Controller
 			if ($valid == 0) {
 				$data = array(
 					'nama' => htmlspecialchars($this->input->post('nama')),
-					'id_user' => $id_user,
+					'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
 					'keterangan' => htmlspecialchars($this->input->post('keterangan')),
 
 				);
-				$insert = $this->User_model->insert($data);
+				$insert = $this->Project_model->insert($data);
 
 				if ($insert) {
 					echo json_encode(array(
@@ -117,6 +117,48 @@ class Tambah extends MY_Controller
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
 				$json['pesan'] 	= "<strong>Project</strong> sudah terdaftar di database!";
+				echo json_encode($json);
+			}
+		} else {
+			$this->input_error();
+		}
+	}
+
+	public function objek_kriptografi()
+	{
+		$this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+		$this->form_validation->set_message('required', '%s harus diisi !');
+		$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+		if ($this->form_validation->run() == TRUE) {
+			$nama = $this->input->post('nama');
+			$valid = $this->Objek_model->validObjek($nama);
+			$id_project = $this->input->post('id_project');
+
+
+			if ($valid == 0) {
+				$data = array(
+					'nama' => htmlspecialchars($this->input->post('nama')),
+					'id_project' => $this->encryptor->enkrip('dekrip', $id_project),
+					'keterangan' => htmlspecialchars($this->input->post('keterangan')),
+
+				);
+				$insert = $this->Objek_model->insert($data);
+
+				if ($insert) {
+					echo json_encode(array(
+						'status' => 1,
+						'csrfName' => $this->security->get_csrf_token_name(),
+						'csrfHash' => $this->security->get_csrf_hash(),
+					));
+				} else {
+					$this->query_error();
+				}
+			} else {
+				$json['status'] = 2;
+				$json['csrfHash'] = $this->security->get_csrf_hash();
+				$json['pesan'] 	= "<strong>Objek</strong> sudah terdaftar di database!";
 				echo json_encode($json);
 			}
 		} else {

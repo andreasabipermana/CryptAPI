@@ -97,4 +97,41 @@ class Tabel extends MY_Controller
 
 		echo json_encode($json_data);
 	}
+
+	public function objek_kriptografi($id_project)
+	{
+		$requestData	= $_REQUEST;
+		$fetch			= $this->Objek_model->gen_tabel($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length'], $id_project);
+
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		$no = 1;
+		foreach ($query->result_array() as $row) {
+
+			$nestedData = array();
+
+			$nestedData[]	= $row['nomor'];
+
+			$nestedData[]	= $row['nama'];
+			$nestedData[]	= $row['keterangan'];
+			$id = $this->encryptor->enkrip('enkrip', $row['id_objek_kriptografi']);
+			$nestedData[]	= "
+            <button onclick=\"ubah('" . $id . "')\" class='btn icon btn-primary'><i class='bi bi-pencil'></i></button>
+			<button onclick=\"hapus('" . $id . "')\" class='btn icon btn-danger'><i class='bi bi-trash'></i></button>";
+
+			$data[] = $nestedData;
+		}
+
+		$json_data = array(
+			"draw"            => intval($requestData['draw']),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $data
+		);
+
+		echo json_encode($json_data);
+	}
 }
