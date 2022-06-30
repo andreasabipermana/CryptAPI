@@ -5,7 +5,7 @@ class Ubah extends MY_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model('User_model');
+        $this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model']);
     }
 
     function input_error()
@@ -89,6 +89,45 @@ class Ubah extends MY_Controller
                 $json['status'] = 2;
                 $json['csrfHash'] = $this->security->get_csrf_hash();
                 $json['pesan']     = "Username sudah terdaftar di database!";
+                echo json_encode($json);
+            }
+        } else {
+            $this->input_error();
+        }
+    }
+
+    public function project()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_message('required', '%s harus diisi !');
+        $this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+        if ($this->form_validation->run() == TRUE) {
+            $id = $this->input->post('id_project');
+            $id_user = $this->session->userdata('id');
+            $nama = $this->input->post('nama');
+            $namalama = $this->input->post('namalama');
+            $valid = $this->User_model->validUsername($namalama);
+
+            if ($nama == $namalama || $valid == 0) {
+
+                $data = array(
+                    'nama' => htmlspecialchars($this->input->post('nama')),
+                    'id_user' => $id_user,
+                    'keterangan' => htmlspecialchars($this->input->post('keterangan')),
+
+                );
+                $this->Project_model->update($data, ['id_user' => $this->encryptor->enkrip('dekrip', $id)]);
+                echo json_encode(array(
+                    'status' => 1,
+                    'csrfName' => $this->security->get_csrf_token_name(),
+                    'csrfHash' => $this->security->get_csrf_hash(),
+                ));
+            } else {
+                $json['status'] = 2;
+                $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['pesan']     = "Nama Project sudah terdaftar di database!";
                 echo json_encode($json);
             }
         } else {

@@ -13,33 +13,32 @@ class Project_model extends MY_Model
     {
         parent::__construct();
     }
-    function gen_tabel($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
+    function gen_tabel($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL, $where = NULL)
     {
-        $sql = "
-	  SELECT 
-	
-	  (@row:=@row+1) AS nomor,
-	  a.`id_user`, 
-	  a.`nama`,
-	  a.`username`,
-	  a.`level`,
-	  a.`aktif`
+        $user_session = $this->session->userdata;
+        $id = $this->encryptor->enkrip('dekrip', $user_session['id']);
 
-	  FROM 
-	  `tb_project` as a
-	  , (SELECT @row := 0) r WHERE 1=1 
-	  ";
+        $sql = "
+            SELECT 
+            
+            (@row:=@row+1) AS nomor,
+            a.`id_project`, 
+            a.`nama`,
+            a.`keterangan`
+
+            FROM 
+            `tb_project` as a
+            , (SELECT @row := 0) r WHERE 1=1 AND a.`id_user`=" . $id . "
+            ";
 
         $data['totalData'] = $this->db->query($sql)->num_rows();
 
         if (!empty($like_value)) {
             $sql .= " AND ( ";
             $sql .= "
-		 a.`nama` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`username` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`level` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`aktif` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 ";
+                    a.`nama` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
+                    OR a.`keterangan` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
+                    ";
             $sql .= " ) ";
         }
 
@@ -49,9 +48,7 @@ class Project_model extends MY_Model
 
             0 => 'nomor',
             1 => 'a.`nama`',
-            2 => 'a.`username`',
-            3 => 'a.`level`',
-            4 => 'a.`aktif`',
+            2 => 'a.`keterangan`',
 
         );
 
@@ -60,5 +57,18 @@ class Project_model extends MY_Model
 
         $data['query'] = $this->db->query($sql);
         return $data;
+    }
+
+    function validProject($nama)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $as  = $this->db->get();
+
+        foreach ($as->result() as $p) {
+            # code...
+            if ($nama == $p->nama) {
+                return 1;
+            }
+        }
     }
 }

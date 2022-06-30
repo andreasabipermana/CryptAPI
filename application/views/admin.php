@@ -43,26 +43,26 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item <?= $this->uri->segment(2) == '' ? 'active' : ''?> ">
+                        <li class="sidebar-item <?= $this->uri->segment(2) == '' ? 'active' : '' ?> ">
                             <a href="index.html" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="sidebar-item <?= $this->uri->segment(2) == 'user' ? 'active' : ''?> ">
-                            <a href="<?=base_url()?>Admin/user" class='sidebar-link'>
+                        <li class="sidebar-item <?= $this->uri->segment(2) == 'user' ? 'active' : '' ?> ">
+                            <a href="<?= base_url() ?>Admin/user" class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
                                 <span>User</span>
                             </a>
                         </li>
-                        <li class="sidebar-item   <?= $this->uri->segment(2) == 'statistik_user' ? 'active' : ''?> ">
+                        <li class="sidebar-item   <?= $this->uri->segment(2) == 'statistik_user' ? 'active' : '' ?> ">
                             <a href="index.html" class='sidebar-link'>
                                 <i class="bi bi-graph-up"></i>
                                 <span>Statistik User</span>
                             </a>
                         </li>
                         <li class="sidebar-item  ">
-                            <a href="<?=base_url()?>Auth/logout" class='sidebar-link'>
+                            <a href="<?= base_url() ?>Auth/logout" class='sidebar-link'>
                                 <i class="bi bi-door-open-fill"></i>
                                 <span>Logout</span>
                             </a>

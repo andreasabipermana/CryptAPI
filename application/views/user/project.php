@@ -45,20 +45,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Absensi Karyawan</td>
-                            <td>Project Sistem Kriptografi aplikasi absensi karyawan</td>
-                            <td>
-                                <a href="object_kriptografi.html" class="btn icon btn-info"><i
-                                        class="bi bi-info-circle"></i></a>
-                                <a href="#" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
-                                <a href="#" class="btn icon btn-danger"><i class="bi bi-trash"></i></a>
-
-
-                            </td>
-                        </tr>
-
 
                     </tbody>
                 </table>
@@ -78,11 +64,11 @@
             </div>
             <div class="modal-body">
                 <form id="formTambah">
-                    <!-- <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
-                        value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs"> -->
+                    <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
+                        value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs">
 
                     <input type="hidden" id="kode" name="kode" value="">
-                    <input type="hidden" id="id_klaster" name="id_klaster" value="">
+                    <input type="hidden" id="id_project" name="id_project" value="">
 
                     <div class="row">
                         <div class="col-md-12" id="error-message">
@@ -92,7 +78,7 @@
                             <label>Nama Project</label>
                             <input type="text" class="form-control" name="nama" id="nama" onpaste="return false"
                                 autocomplete="off">
-                            <input type="hidden" id="nama_projectlama" name="nama_projectlama" value="">
+                            <input type="hidden" id="namalama" name="namalama" value="">
                             <div class="valid-feedback" style="display: block;color:grey">
                                 Info : <span class="badge bg-light-warning">Tidak boleh nama project yang sudah
                                     ada</span>
@@ -123,18 +109,191 @@
 
 
 <script type="text/javascript">
+var tabel = '<?= $tabel ?>';
+var breadcrumb = '<?= $breadcrumb ?>';
+var logs = '';
+var base = '<?= base_url() ?>'
+
 $(function() {
+
+
+    'use strict';
+    var table = $('#table1').DataTable({
+
+        responsive: false,
+        processing: true,
+        serverSide: true,
+        stateSave: false,
+        bAutoWidth: false,
+
+        columnDefs: [{
+            targets: [0],
+            orderData: [0, 1, 2]
+        }, {
+            targets: [1],
+            orderData: [0, 1]
+        }, {
+            targets: [2],
+            orderData: [0, 1]
+        }, {
+            targets: [3],
+            orderData: [0, 1]
+        }],
+
+        language: {
+            searchPlaceholder: 'Pencarian ' + breadcrumb + '...',
+            // processing: '<div class="spinner-grow text-dark" role="status" style="width: 3rem; height: 3rem;"></div>',
+            processing: '<div class="preloader"> <div class="loading"> <div class="spinner-grow text-warning mb-3" style="width: 3rem; height: 3rem;" role="status"> </div> <h5 class="fw-bold">Harap Tunggu..</h5> <p style="color: #BBBBBB">Jangan Refresh</p> </div> </div>',
+            sSearch: '',
+            sInfoFiltered: "(difilter dari _MAX_ total data)",
+            sZeroRecords: "Pencarian tidak ditemukan",
+            sEmptyTable: "Data kosong",
+            lengthMenu: '_MENU_ Data ' + breadcrumb + '  Per Halaman    ',
+            sInfo: "Menampilkan _START_ s/d _END_ dari <b>_TOTAL_ data</b>",
+            oPaginate: {
+                "sPrevious": "Sebelumnya",
+                "sNext": "Selanjutnya"
+            }
+        },
+
+        ajax: {
+            url: base + "tabel/" + tabel,
+            type: "GET",
+            error: function() {
+
+            }
+        }
+
+    });
 
 })
 
 function tambah() {
-    // $('#formTambah')[0].reset();
+    $('#formTambah')[0].reset();
 
-    // $('#kode').val('0');
-    // $kode = $('#kode').val()
+    $('#kode').val('0');
+    $kode = $('#kode').val()
     $("#modalTambah").modal('show')
 
     console.log('success')
-    // console.log($kode)
+    console.log($kode)
+}
+
+function ubah(id) {
+    $('#formTambah')[0].reset();
+    $.ajax({
+        url: base + 'ambil/getProjectById/' + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(json) {
+
+
+            $('#nama').val(json.nama);
+            $('#namalama').val(json.namalama);
+            $('#keterangan').val(json.keterangan);
+            $('#kode').val('1');
+            $('#id_project').val(id);
+            $('#modalTambah').modal('show');
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error get data from ajax');
+        }
+    });
+}
+
+
+
+function simpan() {
+    if ($('#kode').val() == 0) {
+        var url = base + 'tambah/user';
+    } else {
+        var url = base + 'ubah/user';
+    }
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: $('#formTambah').serialize(),
+        dataType: 'JSON',
+        success: function(json) {
+            if (json.status == 1) {
+                Swal.fire({
+                    title: "Berhasil!",
+                    text: "Data berhasil disimpan!",
+                    icon: "success",
+                    button: "Oke",
+                    timer: 1300
+                }).then(function() {
+
+                    $('#table1').DataTable().ajax.reload(null, false);
+                    $('#csrfs').val(json.csrfHash);
+
+                    location.reload()
+                    $('#modalTambah').modal('toggle');
+                })
+
+            } else {
+                Swal.fire({
+                    title: "Gagal!",
+                    text: json.pesan,
+                    icon: "error",
+                    button: "Oke"
+                });
+                $('#msg').html(
+                    '<div class="alert alert-light-warning alert-dismissible show fade"><strong>' +
+                    json
+                    .pesan +
+                    '</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+                );
+
+                $('#csrfs').val(json.csrfHash);
+
+            }
+        }
+    });
+}
+
+
+function hapus(id) {
+
+    Swal.fire({
+        title: 'Apa anda yakin?',
+        text: "Aksi ini tidak bisa dikembalikan semula",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var token = $('input[name="<?php echo $this->security->get_csrf_token_name(); ?>"]').attr(
+                '<?php echo $this->security->get_csrf_hash(); ?>')
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Csrf-Token', token);
+                }
+            });
+            $.ajax({
+                url: base + '/hapus/user/' + id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    Swal.fire({
+                        title: "Sukses",
+                        icon: "success",
+                        text: "Data anda berhasil dihapus",
+                        type: "success",
+                        timer: 1300
+                    });
+                    $('#table1').DataTable().ajax.reload(null, false);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire('Error deleting data');
+                }
+            });
+        }
+    })
+
 }
 </script>
