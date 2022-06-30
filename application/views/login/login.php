@@ -42,8 +42,11 @@
 
                                         </div>
                                     </div>
-                                    <form class="form form-vertical" method="post" action="<?=base_url()?>Auth/login"
+                                    <form class="form form-vertical" method="post" action="<?= base_url() ?>Auth/login"
                                         id="FormLogin" role="login">
+                                        <input type="hidden"
+                                            name="<?php echo $this->security->get_csrf_token_name(); ?>"
+                                            value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs">
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">

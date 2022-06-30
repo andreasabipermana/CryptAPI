@@ -1,14 +1,15 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 define('EXT', '.php');
 spl_autoload_register('loadMyCore');
-function loadMyCore($class){
-	if (file_exists(APPPATH."core/".strtolower($class).EXT)) {
-		include_once(APPPATH."core/".strtolower($class).EXT);
+function loadMyCore($class)
+{
+	if (file_exists(APPPATH . "core/" . strtolower($class) . EXT)) {
+		include_once(APPPATH . "core/" . strtolower($class) . EXT);
 	}
-	if(file_exists(APPPATH."models/".strtolower($class).EXT)){
-		include_once(APPPATH."models/".strtolower($class).EXT);
+	if (file_exists(APPPATH . "models/" . strtolower($class) . EXT)) {
+		include_once(APPPATH . "models/" . strtolower($class) . EXT);
 	}
 }
 
@@ -344,7 +345,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'do6AD5AqXeuh2YQxqAsSw17Z1EDQG1uc';
 
 /*
 |--------------------------------------------------------------------------

@@ -60,21 +60,21 @@ class Tambah extends MY_Controller
 					if ($insert) {
 						echo json_encode(array(
 							'status' => 1,
-							// 'csrfName'=>$this->security->get_csrf_token_name(),
-							// 'csrfHash'=>$this->security->get_csrf_hash(),
+							'csrfName' => $this->security->get_csrf_token_name(),
+							'csrfHash' => $this->security->get_csrf_hash(),
 						));
 					} else {
 						$this->query_error();
 					}
 				} else {
 					$json['status'] = 2;
-					// $json['csrfHash'] = $this->security->get_csrf_hash();
+					$json['csrfHash'] = $this->security->get_csrf_hash();
 					$json['pesan'] 	= "<strong>Email</strong> sudah terdaftar di database!";
 					echo json_encode($json);
 				}
 			} else {
 				$json['status'] = 2;
-				// $json['csrfHash'] = $this->security->get_csrf_hash();
+				$json['csrfHash'] = $this->security->get_csrf_hash();
 				$json['pesan'] 	= "<strong>NIP</strong> sudah terdaftar di database!";
 				echo json_encode($json);
 			}

@@ -76,18 +76,18 @@ class Ubah extends MY_Controller
                     $this->User_model->update($data, ['id_user' => $this->encryptor->enkrip('dekrip', $id)]);
                     echo json_encode(array(
                         'status' => 1,
-                        // 'csrfName' => $this->security->get_csrf_token_name(),
-                        // 'csrfHash' => $this->security->get_csrf_hash(),
+                        'csrfName' => $this->security->get_csrf_token_name(),
+                        'csrfHash' => $this->security->get_csrf_hash(),
                     ));
                 } else {
                     $json['status'] = 2;
-                    // $json['csrfHash'] = $this->security->get_csrf_hash();
+                    $json['csrfHash'] = $this->security->get_csrf_hash();
                     $json['pesan']     = "Email sudah terdaftar di database!";
                     echo json_encode($json);
                 }
             } else {
                 $json['status'] = 2;
-                // $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['csrfHash'] = $this->security->get_csrf_hash();
                 $json['pesan']     = "Username sudah terdaftar di database!";
                 echo json_encode($json);
             }

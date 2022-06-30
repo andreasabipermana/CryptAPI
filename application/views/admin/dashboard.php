@@ -16,12 +16,28 @@
                         <div class="card-body px-3 py-4-5">
                             <div class="row">
                                 <div class="col-md-4">
+                                    <div class="stats-icon green">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">User</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getUserCount ?></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-3 py-4-5">
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="stats-icon purple">
                                     </div>
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Projek</h6>
-                                    <h6 class="font-extrabold mb-0">1</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getProjectCount ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -38,28 +54,13 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Objek</h6>
-                                    <h6 class="font-extrabold mb-0">6</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getObjekCount ?></h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-3 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="stats-icon green">
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <h6 class="text-muted font-semibold">Kunci</h6>
-                                    <h6 class="font-extrabold mb-0">7</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
                         <div class="card-body px-3 py-4-5">
@@ -70,7 +71,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Endpoint API</h6>
-                                    <h6 class="font-extrabold mb-0">3</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getEndpointCount ?></h6>
                                 </div>
                             </div>
                         </div>

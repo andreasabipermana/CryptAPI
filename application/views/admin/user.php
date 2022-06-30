@@ -65,12 +65,12 @@
             </div>
             <div class="modal-body">
                 <form id="formTambah">
-                    <!-- <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
-                        value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs"> -->
+
 
                     <input type="hidden" id="kode" name="kode" value="">
                     <input type="hidden" id="id_user" name="id_user" value="">
-
+                    <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>"
+                        value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs">
                     <div class="row">
                         <div class="col-md-12" id="error-message">
 
@@ -237,6 +237,7 @@ function ubah(id) {
             $('#id_user').val(id);
             $('#modalTambah').modal('show');
 
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('Error get data from ajax');
@@ -265,12 +266,14 @@ function simpan() {
                     icon: "success",
                     button: "Oke",
                     timer: 1300
-                });
-                $('#table1').DataTable().ajax.reload(null, false);
-                // $('#csrfs').attr('value', json.csrfHash);
-                // $('#csrfs_upload').attr('value', json.csrfHash);
+                }).then(function() {
 
-                $('#modalTambah').modal('toggle');
+                    $('#table1').DataTable().ajax.reload(null, false);
+                    $('#csrfs').val(json.csrfHash);
+
+                    location.reload()
+                    $('#modalTambah').modal('toggle');
+                })
 
             } else {
                 Swal.fire({
@@ -280,13 +283,13 @@ function simpan() {
                     button: "Oke"
                 });
                 $('#msg').html(
-                    '<div class="alert alert-light-warning alert-dismissible show fade"><strong>' + json
+                    '<div class="alert alert-light-warning alert-dismissible show fade"><strong>' +
+                    json
                     .pesan +
                     '</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
                 );
 
-                // $('#csrfs').attr('value', json.csrfHash);
-                // $('#csrfs_upload').attr('value', json.csrfHash);
+                $('#csrfs').val(json.csrfHash);
 
             }
         }
@@ -306,6 +309,13 @@ function hapus(id) {
         confirmButtonText: 'Ya, Hapus!'
     }).then((result) => {
         if (result.isConfirmed) {
+            var token = $('input[name="<?php echo $this->security->get_csrf_token_name(); ?>"]').attr(
+                '<?php echo $this->security->get_csrf_hash(); ?>')
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Csrf-Token', token);
+                }
+            });
             $.ajax({
                 url: base + '/hapus/user/' + id,
                 type: "GET",
@@ -330,232 +340,3 @@ function hapus(id) {
 
 }
 </script>
-
-<!-- <script type="text/javascript">
-$(function() {
-
-
-    'use strict';
-    var table = $('#datatable_master_user').DataTable({
-
-        responsive: false,
-        processing: true,
-        serverSide: true,
-        stateSave: false,
-        bAutoWidth: false,
-
-        columnDefs: [{
-            targets: [0],
-            orderData: [0, 1, 2]
-        }, {
-            targets: [1],
-            orderData: [0, 1]
-        }, {
-            targets: [2],
-            orderData: [0, 1, 2]
-        }, {
-            targets: [3],
-            orderData: [0, 1]
-        }, {
-            targets: [5],
-            bSortable: false
-        }],
-
-        language: {
-            searchPlaceholder: 'Pencarian ' + breadcrumb + '...',
-            // processing: '<div class="spinner-grow text-dark" role="status" style="width: 3rem; height: 3rem;"></div>',
-            processing: '<div class="preloader"> <div class="loading"> <div class="spinner-grow text-warning mb-3" style="width: 3rem; height: 3rem;" role="status"> </div> <h5 class="fw-bold">Harap Tunggu..</h5> <p style="color: #BBBBBB">Jangan Refresh</p> </div> </div>',
-            sSearch: '',
-            sInfoFiltered: "(difilter dari _MAX_ total data)",
-            sZeroRecords: "Pencarian tidak ditemukan",
-            sEmptyTable: "Data kosong",
-            lengthMenu: '_MENU_ Data ' + breadcrumb + '  Per Halaman    ',
-            sInfo: "Menampilkan _START_ s/d _END_ dari <b>_TOTAL_ data</b>",
-            oPaginate: {
-                "sPrevious": "Sebelumnya",
-                "sNext": "Selanjutnya"
-            }
-        },
-
-        ajax: {
-            url: base + "tabel/" + tabel,
-            type: "GET",
-            error: function() {
-
-            }
-        }
-
-    });
-})
-
-
-// Onchange saat tambah
-function get_kd_kab() {
-    var id = $('#id_provinsi').val();
-    var url = "<?php echo site_url('ambil/get_kd_kab'); ?>/" + id;
-    $('#kd_kab').prop('disabled', false);
-    $('#kd_kab').load(url);
-    return false;
-}
-
-function get_kd_kec() {
-    var id = $('#kd_kab').val();
-    var url = "<?php echo site_url('ambil/get_kd_kec'); ?>/" + id;
-    $('#kd_kec').prop('disabled', false);
-    $('#kd_kec').load(url);
-    return false;
-}
-
-function get_kd_desa() {
-    var id = $('#kd_kec').val();
-    var url = "<?php echo site_url('ambil/get_kd_desa'); ?>/" + id;
-    $('#kd_desa').prop('disabled', false);
-    $('#kd_desa').load(url);
-    return false;
-}
-
-// Untuk request 
-function get_kode_kab($kode, $kode_prov) {
-    var url = "<?= site_url('ambil/get_kode_kab'); ?>/" + $kode + "/" + $kode_prov;
-    $('#kd_kab').prop('disabled', false);
-    $('#kd_kab').load(url);
-    return false;
-}
-
-function get_kode_kec($kode_kec, $kode_kab) {
-    var url = "<?= site_url('ambil/get_kode_kec'); ?>/" + $kode_kec + "/" + $kode_kab;
-    $('#kd_kec').prop('disabled', false);
-    $('#kd_kec').load(url);
-    return false;
-}
-
-function get_kode_desa($kode_desa, $kode_kec) {
-    var url = "<?= site_url('ambil/get_kode_desa'); ?>/" + $kode_desa + "/" + $kode_kec;
-    $('#kd_desa').prop('disabled', false);
-    $('#kd_desa').load(url);
-    return false;
-}
-
-function add() {
-    $('#kd_kab').prop('disabled', true);
-    $('#kd_kec').prop('disabled', true);
-    $('#kd_desa').prop('disabled', true);
-
-    $('#formTambah')[0].reset();
-
-    $('#kd_kab').val(0);
-    $('#kd_kec').val(0);
-    $('#kd_desa').val(0);
-
-    $('#kode').val('0');
-    $("#modalTambah").modal('show')
-}
-
-
-
-
-function simpan() {
-    if ($('#kode').val() == 0) {
-        var url = base + 'tambah/master_user';
-    } else {
-        var url = base + 'edit/master_user';
-    }
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: $('#formTambah').serialize(),
-        dataType: 'JSON',
-        success: function(json) {
-            if (json.status == 1) {
-                swal({
-                    title: "Berhasil!",
-                    text: "Data berhasil disimpan!",
-                    icon: "success",
-                    button: "Oke",
-                    timer: 1300
-                });
-                $('#datatable_master_user').DataTable().ajax.reload(null, false);
-                $('#csrfs').attr('value', json.csrfHash);
-                $('#csrfs_upload').attr('value', json.csrfHash);
-
-                $('#modalTambah').modal('toggle');
-
-            } else {
-                // swal({
-                //     title: "Gagal!",
-                //     text: json.pesan,
-                //     icon: "error",
-                //     button: "Oke"
-                // });
-                $('#msg').html(
-                    '<div class="alert alert-light-warning alert-dismissible show fade"><strong>' + json
-                    .pesan +
-                    '</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
-                );
-
-                $('#csrfs').attr('value', json.csrfHash);
-                $('#csrfs_upload').attr('value', json.csrfHash);
-
-            }
-        }
-    });
-}
-
-
-// Delete
-
-
-
-//    Impor CSV
-function impor() {
-    $('#csv_file').val('');
-    $("#importModal").modal('show')
-}
-
-//     function imporcsv() {
-//     var form = new FormData();
-//     var file_data = $('#csv_file').prop('files')[0];
-//     form.append('file', file_data);
-
-//     $.ajax({
-//         url: "<?php echo base_url(); ?>import/master_user",
-//         method: "POST",
-//         data: form,
-//         contentType: false,
-//         cache: false,
-//         processData: false,
-//         beforeSend: function () {
-//             $('#import_csv_btn').html('Importing...');
-//             if (!file_data) {
-//                 $('#import_csv_btn').attr('disabled', false);
-//               $('#import_csv_btn').html('Import');
-//               $("#import_csv").trigger("reset");
-//                 $('#error-message-import').html('<div class="alert alert-light-danger alert-dismissible show fade">Harap lampirkan file!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-//             }
-//         },
-//         success: function (json) {
-//           if (json.status == 2) {
-//               $('#import_csv_btn').attr('disabled', false);
-//               $('#import_csv_btn').html('Import');
-//               $("#import_csv").trigger("reset");
-//               $('#error-message-import').html('<div class="alert alert-light-warning alert-dismissible show fade">'+ json.pesan +'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-
-
-//           } else {
-//             swal({
-//                 title: "Berhasil!",
-//                 text: "Import Data sukses!",
-//                 icon: "success",
-//                 button: "Oke",
-//             });
-//             $('#import_csv_btn').attr('disabled', false);
-//             $('#import_csv_btn').html('Import');
-//             $("#import_csv").trigger("reset");
-//             $('#datatable_master_user').DataTable().ajax.reload(null, false);
-//             $('#importModal').modal('toggle');
-//           }
-//         }  
-//     });
-
-// }
-</script> -->
