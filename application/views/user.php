@@ -59,21 +59,21 @@
                             </a>
                         </li>
                         <li class="sidebar-item  <?= $this->uri->segment(2) == 'kunci' ? 'active' : '' ?> ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="<?= base_url() ?>User/kunci" class='sidebar-link'>
                                 <i class="bi bi-key-fill"></i>
                                 <span>Kunci</span>
                             </a>
                         </li>
                         <li
                             class="sidebar-item  <?= $this->uri->segment(2) == 'endpoint_api' || $this->uri->segment(2) == 'detail_endpoint_api' ? 'active' : '' ?> ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="<?= base_url() ?>User/endpoint_api" class='sidebar-link'>
                                 <i class="bi bi-globe"></i>
                                 <span>API Endpoint</span>
                             </a>
                         </li>
                         <li
                             class="sidebar-item  <?= $this->uri->segment(2) == 'statistik_akses' || $this->uri->segment(2) == 'grafik_statistik' ? 'active' : '' ?>  ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="<?= base_url() ?>User/statistik_akses" class='sidebar-link'>
                                 <i class="bi bi-graph-up"></i>
                                 <span>Statistik Akses</span>
                             </a>

@@ -42,4 +42,15 @@ class Hapus extends MY_Controller
             ));
         }
     }
+
+    public function kunci($id)
+    {
+        if ($this->input->is_ajax_request()) {
+            $id = $this->encryptor->enkrip('dekrip', $id);
+            $hapus = $this->Kunci_model->delete($id);
+            echo json_encode(array(
+                "pesan" => "<font color='green'><i class='fa fa-check'></i> Data berhasil dihapus !</font>",
+            ));
+        }
+    }
 }

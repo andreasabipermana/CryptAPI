@@ -21,6 +21,8 @@ class Welcome extends MY_Controller
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		// $this->load->view('welcome_message');
+		// echo base64_encode(openssl_random_pseudo_bytes(32));
+		echo $this->encryptor->enkrip2('enkrip', '123');
 	}
 }

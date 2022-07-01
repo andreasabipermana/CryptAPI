@@ -173,4 +173,45 @@ class Ubah extends MY_Controller
             $this->input_error();
         }
     }
+
+    public function kunci()
+    {
+        $this->form_validation->set_rules('nama_kunci', 'Nama Kunci', 'trim|required');
+        $this->form_validation->set_rules('kunci', 'Kunci', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+        $this->form_validation->set_message('required', '%s harus diisi !');
+        $this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+        if ($this->form_validation->run() == TRUE) {
+            $id = $this->input->post('id_kunci');
+            $kunci = $this->input->post('kunci');
+            $kuncilama = $this->input->post('kuncilama');
+            $valid = $this->Kunci_model->validKunci($kuncilama);
+            $id_user = $this->session->userdata('id');
+
+            if ($kunci == $kuncilama || $valid == 0) {
+
+                $data = array(
+                    'nama_kunci' => htmlspecialchars($this->input->post('nama_kunci')),
+                    'kunci' => $this->input->post('kunci'),
+                    'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
+                    'keterangan' => htmlspecialchars($this->input->post('keterangan')),
+
+                );
+                $this->Kunci_model->update($data, ['id_kunci' => $this->encryptor->enkrip('dekrip', $id)]);
+                echo json_encode(array(
+                    'status' => 1,
+                    'csrfName' => $this->security->get_csrf_token_name(),
+                    'csrfHash' => $this->security->get_csrf_hash(),
+                ));
+            } else {
+                $json['status'] = 2;
+                $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['pesan']     = "Kunci sudah terdaftar di database, silahkan bangkitkan ulang !";
+                echo json_encode($json);
+            }
+        } else {
+            $this->input_error();
+        }
+    }
 }

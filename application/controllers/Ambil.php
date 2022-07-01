@@ -45,4 +45,26 @@ class Ambil extends MY_Controller
 		);
 		echo json_encode($data);
 	}
+
+	public function getKunciById($id)
+	{
+		$id = $this->encryptor->enkrip('dekrip', $id);
+		$datas = $this->Kunci_model->get($id, FALSE);
+		$data = array(
+			'nama_kunci' => $datas->nama_kunci,
+			'kunci' => $datas->kunci,
+			'keterangan' => $datas->keterangan,
+		);
+		echo json_encode($data);
+	}
+
+	public function bangkitkanKunci()
+	{
+		$hasil = base64_encode(openssl_random_pseudo_bytes(32));
+		$data = [
+			'status' => 1,
+			'kunci' => $hasil
+		];
+		echo json_encode($data);
+	}
 }

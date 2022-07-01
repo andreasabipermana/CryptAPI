@@ -52,7 +52,9 @@ class User extends MY_Controller
     public function kunci()
     {
         $data = [
-            'konten' => 'dashboard',
+            'konten' => 'kunci',
+            'breadcrumb' => 'kunci',
+            'tabel' => 'kunci'
         ];
         $this->load->view('user', $data);
     }
@@ -60,7 +62,9 @@ class User extends MY_Controller
     public function endpoint_api()
     {
         $data = [
-            'konten' => 'dashboard',
+            'konten' => 'endpoint_api',
+            'breadcrumb' => 'endpoint_api',
+            'tabel' => 'endpoint_api'
         ];
         $this->load->view('user', $data);
     }

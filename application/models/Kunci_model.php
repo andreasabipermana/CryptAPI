@@ -15,20 +15,20 @@ class Kunci_model extends MY_Model
     }
     function gen_tabel($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
     {
+        $user_session = $this->session->userdata;
+        $id = $this->encryptor->enkrip('dekrip', $user_session['id']);
         $sql = "
-	  SELECT 
-	
-	  (@row:=@row+1) AS nomor,
-	  a.`id_user`, 
-	  a.`nama`,
-	  a.`username`,
-	  a.`level`,
-	  a.`aktif`
-
-	  FROM 
-	  `tb_kunci` as a
-	  , (SELECT @row := 0) r WHERE 1=1 
-	  ";
+            SELECT 
+            
+            (@row:=@row+1) AS nomor,
+            a.`id_kunci`,
+            a.`id_user`, 
+            a.`nama_kunci`,
+            a.`keterangan`
+            FROM 
+            `tb_kunci` as a
+            , (SELECT @row := 0) r WHERE 1=1 AND `id_user`=" . $id . "
+            ";
 
         $data['totalData'] = $this->db->query($sql)->num_rows();
 
@@ -36,9 +36,7 @@ class Kunci_model extends MY_Model
             $sql .= " AND ( ";
             $sql .= "
 		 a.`nama` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`username` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`level` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
-		 OR a.`aktif` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
+		 OR a.`keterangan` LIKE '%" . $this->db->escape_like_str($like_value) . "%'
 		 ";
             $sql .= " ) ";
         }
@@ -48,10 +46,8 @@ class Kunci_model extends MY_Model
         $columns_order_by = array(
 
             0 => 'nomor',
-            1 => 'a.`nama`',
-            2 => 'a.`username`',
-            3 => 'a.`level`',
-            4 => 'a.`aktif`',
+            1 => 'a.`nama_kunci`',
+            2 => 'a.`keterangan`',
 
         );
 
@@ -60,5 +56,18 @@ class Kunci_model extends MY_Model
 
         $data['query'] = $this->db->query($sql);
         return $data;
+    }
+
+    function validKunci($kunci)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $as  = $this->db->get();
+
+        foreach ($as->result() as $p) {
+            # code...
+            if ($kunci == $p->kunci) {
+                return 1;
+            }
+        }
     }
 }

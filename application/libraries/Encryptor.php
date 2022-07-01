@@ -18,7 +18,8 @@ class Encryptor
      *
      * @return string
      */
-    function enkrip($action, $string) {
+    function enkrip($action, $string)
+    {
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = '86jBkpti4n1FSoKbmSr19SdHIL4Cnbpw';
@@ -28,16 +29,37 @@ class Encryptor
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        if ( $action == 'enkrip' ) {
+        if ($action == 'enkrip') {
             $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
             $output = base64_encode($output);
-        } else if( $action == 'dekrip' ) {
+        } else if ($action == 'dekrip') {
+            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        }
+        return $output;
+    }
+    function enkrip2($action, $string)
+    {
+        $output = false;
+        $encrypt_method = "AES-256-GCM";
+        $secret_key = '86jBkpti4n1FSoKbmSr19SdHIL4Cnbpw';
+        $secret_iv = $secret_key;
+        // hash
+        $key = hash('sha256', $secret_key);
+
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        // $iv = substr(hash('sha256', $secret_iv), 0, 16);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
+        if ($action == 'enkrip') {
+            $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+            $output = base64_encode($output);
+        } else if ($action == 'dekrip') {
             $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
         }
         return $output;
     }
 
-    function encrypt_decrypt2($action, $string) {
+    function encrypt_decrypt2($action, $string)
+    {
         $output = false;
         $encrypt_method = MCRYPT_BLOWFISH;
         $encrypt_method2 = "AES-256-CBC";
@@ -52,19 +74,19 @@ class Encryptor
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        if ( $action == 'encrypt' ) {
+        if ($action == 'encrypt') {
             $output_blow = mcrypt_encrypt($encrypt_method, $key_blow, $string, $mode, $iv);
             $output_blow = base64_encode($output_blow);
             $output_aes = openssl_encrypt($output_blow, $encrypt_method2, $key, 0, $iv);
             $output = base64_encode($output_aes);
-        } else if( $action == 'decrypt' ) {
+        } else if ($action == 'decrypt') {
             $output = openssl_decrypt(base64_decode($string), $encrypt_method2, $key, 0, $iv);
             $output = mcrypt_decrypt($encrypt_method, $key_blow, base64_decode($output), $mode, $iv);
-
         }
         return $output;
     }
-    function encrypt_decrypt3($action, $string) {
+    function encrypt_decrypt3($action, $string)
+    {
         $output = false;
         $encrypt_method = MCRYPT_BLOWFISH;
         $encrypt_method2 = "AES-256-CBC";
@@ -79,19 +101,19 @@ class Encryptor
 
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        if ( $action == 'encrypt' ) {
+        if ($action == 'encrypt') {
             $output = openssl_encrypt($string, $encrypt_method2, $key, 0, $iv);
             $output = base64_encode($output);
             $output = mcrypt_encrypt($encrypt_method, $key_blow, $output, $mode, $iv);
             $output = base64_encode($output);
-        } else if( $action == 'decrypt' ) {
+        } else if ($action == 'decrypt') {
             $output = mcrypt_decrypt($encrypt_method, $key_blow, base64_decode($string), $mode, $iv);
             $output = openssl_decrypt(base64_decode($output), $encrypt_method2, $key, 0, $iv);
-
         }
         return $output;
     }
-    function encrypt_decrypt_blow($action, $string) {
+    function encrypt_decrypt_blow($action, $string)
+    {
         $output = false;
         $encrypt_method = MCRYPT_BLOWFISH;
         $mode = MCRYPT_MODE_ECB;
@@ -104,10 +126,10 @@ class Encryptor
         $key = substr($key, 0, $key_size_blow);
 
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        if ( $action == 'encrypt' ) {
+        if ($action == 'encrypt') {
             $output = mcrypt_encrypt($encrypt_method, $key, $string, $mode, $iv);
             $output = base64_encode($output);
-        } else if( $action == 'decrypt' ) {
+        } else if ($action == 'decrypt') {
             $output = mcrypt_decrypt($encrypt_method, $key, base64_decode($string), $mode, $iv);
         }
         return $output;

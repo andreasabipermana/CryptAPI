@@ -69,13 +69,13 @@ class Tambah extends MY_Controller
 				} else {
 					$json['status'] = 2;
 					$json['csrfHash'] = $this->security->get_csrf_hash();
-					$json['pesan'] 	= "<strong>Email</strong> sudah terdaftar di database!";
+					$json['pesan'] 	= "Email sudah terdaftar di database!";
 					echo json_encode($json);
 				}
 			} else {
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
-				$json['pesan'] 	= "<strong>NIP</strong> sudah terdaftar di database!";
+				$json['pesan'] 	= "Username sudah terdaftar di database!";
 				echo json_encode($json);
 			}
 		} else {
@@ -116,7 +116,7 @@ class Tambah extends MY_Controller
 			} else {
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
-				$json['pesan'] 	= "<strong>Project</strong> sudah terdaftar di database!";
+				$json['pesan'] 	= "Project sudah terdaftar di database!";
 				echo json_encode($json);
 			}
 		} else {
@@ -158,7 +158,50 @@ class Tambah extends MY_Controller
 			} else {
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
-				$json['pesan'] 	= "<strong>Objek</strong> sudah terdaftar di database!";
+				$json['pesan'] 	= "Objek sudah terdaftar di database!";
+				echo json_encode($json);
+			}
+		} else {
+			$this->input_error();
+		}
+	}
+
+	public function kunci()
+	{
+		$this->form_validation->set_rules('nama_kunci', 'Nama Kunci', 'trim|required');
+		$this->form_validation->set_rules('kunci', 'Kunci', 'trim|required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'trim|required');
+		$this->form_validation->set_message('required', '%s harus diisi !');
+		$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+		if ($this->form_validation->run() == TRUE) {
+			$kunci = $this->input->post('kunci');
+			$valid = $this->Kunci_model->validKunci($kunci);
+			$id_user = $this->session->userdata('id');
+
+			if ($valid == 0) {
+				$data = array(
+					'nama_kunci' => htmlspecialchars($this->input->post('nama_kunci')),
+					'kunci' => $this->input->post('kunci'),
+					'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
+					'keterangan' => htmlspecialchars($this->input->post('keterangan')),
+
+				);
+				$insert = $this->Kunci_model->insert($data);
+
+				if ($insert) {
+					echo json_encode(array(
+						'status' => 1,
+						'csrfName' => $this->security->get_csrf_token_name(),
+						'csrfHash' => $this->security->get_csrf_hash(),
+					));
+				} else {
+					$this->query_error();
+				}
+			} else {
+				$json['status'] = 2;
+				$json['csrfHash'] = $this->security->get_csrf_hash();
+				$json['pesan'] 	= "Kunci sudah terdaftar di database, silahkan bangkitkan ulang !";
 				echo json_encode($json);
 			}
 		} else {
