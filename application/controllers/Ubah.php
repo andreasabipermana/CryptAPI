@@ -5,7 +5,7 @@ class Ubah extends MY_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model']);
+        $this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
     }
 
     function input_error()
@@ -265,6 +265,47 @@ class Ubah extends MY_Controller
                 $json['status'] = 2;
                 $json['csrfHash'] = $this->security->get_csrf_hash();
                 $json['pesan']     = "Rute sudah terdaftar di database!";
+                echo json_encode($json);
+            }
+        } else {
+            $this->input_error();
+        }
+    }
+
+    public function detail_endpoint_api()
+    {
+        $this->form_validation->set_rules('id_objek_kriptografi', 'Objek Kriptografi', 'required');
+        $this->form_validation->set_rules('id_kunci', 'Kunci Kriptografi', 'required');
+        $this->form_validation->set_message('required', '%s harus diisi !');
+        $this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+        if ($this->form_validation->run() == TRUE) {
+
+
+            $id = $this->input->post('id_detail_endpoint');
+            $id_objek_kriptografi = $this->input->post('id_objek_kriptografi');
+            $id_objek_kriptografi_lama = $this->input->post('id_objek_kriptografi_lama');
+
+            $valid = $this->Objek_model->validObjekById($id_objek_kriptografi);
+
+            if ($id_objek_kriptografi == $id_objek_kriptografi_lama || $valid == 0) {
+
+                $data = array(
+                    'id_endpoint' => $this->input->post('id_endpoint'),
+                    'id_objek_kriptografi' => $this->input->post('id_objek_kriptografi'),
+                    'id_kunci' => $this->input->post('id_kunci'),
+
+                );
+                $this->Endpoint_detail_model->update($data, ['id_detail_endpoint' => $this->encryptor->enkrip('dekrip', $id)]);
+                echo json_encode(array(
+                    'status' => 1,
+                    'csrfName' => $this->security->get_csrf_token_name(),
+                    'csrfHash' => $this->security->get_csrf_hash(),
+                ));
+            } else {
+                $json['status'] = 2;
+                $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['pesan']     = "Objek sudah terdaftar di database!";
                 echo json_encode($json);
             }
         } else {

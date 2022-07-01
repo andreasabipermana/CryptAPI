@@ -7,7 +7,7 @@ class Tabel extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model']);
+		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
 	}
 
 
@@ -205,6 +205,45 @@ class Tabel extends MY_Controller
 			$id = $this->encryptor->enkrip('enkrip', $row['id_endpoint']);
 			$nestedData[]	= "
             <button onclick=\"info('" . $id . "')\" class='btn icon btn-info'><i class='bi bi-info-circle'></i></button>
+            <button onclick=\"ubah('" . $id . "')\" class='btn icon btn-primary'><i class='bi bi-pencil'></i></button>
+			<button onclick=\"hapus('" . $id . "')\" class='btn icon btn-danger'><i class='bi bi-trash'></i></button>";
+
+			$data[] = $nestedData;
+		}
+
+		$json_data = array(
+			"draw"            => intval($requestData['draw']),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $data
+		);
+
+		echo json_encode($json_data);
+	}
+
+	public function detail_endpoint_api($id_endpoint)
+	{
+
+		$requestData	= $_REQUEST;
+		$fetch			= $this->Endpoint_detail_model->gen_tabel($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length'], $id_endpoint);
+
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		$no = 1;
+		foreach ($query->result_array() as $row) {
+
+			$nestedData = array();
+
+			$nestedData[]	= $row['nomor'];
+
+			$nestedData[]	= $row['nama_endpoint'];
+			$nestedData[]	= $row['nama_objek'];
+			$nestedData[]	= $row['nama_kunci'];
+			$id = $this->encryptor->enkrip('enkrip', $row['id_detail_endpoint']);
+			$nestedData[]	= "
             <button onclick=\"ubah('" . $id . "')\" class='btn icon btn-primary'><i class='bi bi-pencil'></i></button>
 			<button onclick=\"hapus('" . $id . "')\" class='btn icon btn-danger'><i class='bi bi-trash'></i></button>";
 

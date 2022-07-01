@@ -7,7 +7,7 @@ class Ambil extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model']);
+		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
 	}
 
 	public function getUserById($id)
@@ -89,6 +89,19 @@ class Ambil extends MY_Controller
 			'nama' => $datas->nama,
 			'rute' => $datas->rute,
 			'aktif' => $datas->aktif,
+		);
+		echo json_encode($data);
+	}
+
+	public function getDetailEndpointById($id)
+	{
+		$id = $this->encryptor->enkrip('dekrip', $id);
+		$datas = $this->Endpoint_detail_model->get($id, FALSE);
+		$data = array(
+			'id_detail_endpoint' => $datas->id_detail_endpoint,
+			'id_endpoint' => $datas->id_endpoint,
+			'id_objek_kriptografi' => $datas->id_objek_kriptografi,
+			'id_kunci' => $datas->id_kunci,
 		);
 		echo json_encode($data);
 	}

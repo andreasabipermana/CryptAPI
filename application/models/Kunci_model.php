@@ -70,4 +70,12 @@ class Kunci_model extends MY_Model
             }
         }
     }
+    function getKunci($id_user)
+    {
+        $this->db->select(['id_kunci', 'nama_kunci']);
+        $this->db->where(['id_user' => $id_user]);
+        $this->db->from('{PRE}' . $this->_table_name);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

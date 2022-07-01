@@ -5,7 +5,7 @@ class Tambah extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model']);
+		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
 	}
 
 	function input_error()
@@ -259,6 +259,46 @@ class Tambah extends MY_Controller
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
 				$json['pesan'] 	= "Kunci API sudah terdaftar di database silahkan bangkitkan ulang!";
+				echo json_encode($json);
+			}
+		} else {
+			$this->input_error();
+		}
+	}
+
+	public function detail_endpoint_api()
+	{
+		$this->form_validation->set_rules('id_objek_kriptografi', 'Objek Kriptografi', 'required');
+		$this->form_validation->set_rules('id_kunci', 'Kunci Kriptografi', 'required');
+		$this->form_validation->set_message('required', '%s harus diisi !');
+		$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+		if ($this->form_validation->run() == TRUE) {
+			$id_objek_kriptografi = $this->input->post('id_objek_kriptografi');
+
+			$valid = $this->Objek_model->validObjekById($id_objek_kriptografi);
+
+			if ($valid == 0) {
+				$data = array(
+					'id_endpoint' => $this->encryptor->enkrip('dekrip', $this->input->post('id_endpoint')),
+					'id_objek_kriptografi' => $this->input->post('id_objek_kriptografi'),
+					'id_kunci' => $this->input->post('id_kunci'),
+				);
+				$insert = $this->Endpoint_detail_model->insert($data);
+
+				if ($insert) {
+					echo json_encode(array(
+						'status' => 1,
+						'csrfName' => $this->security->get_csrf_token_name(),
+						'csrfHash' => $this->security->get_csrf_hash(),
+					));
+				} else {
+					$this->query_error();
+				}
+			} else {
+				$json['status'] = 2;
+				$json['csrfHash'] = $this->security->get_csrf_hash();
+				$json['pesan'] 	= "Objek sudah terdaftar di database!";
 				echo json_encode($json);
 			}
 		} else {

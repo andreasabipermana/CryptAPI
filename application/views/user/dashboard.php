@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Projek</h6>
-                                    <h6 class="font-extrabold mb-0">1</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getProjectCount ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Objek</h6>
-                                    <h6 class="font-extrabold mb-0">6</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getObjekCount ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Kunci</h6>
-                                    <h6 class="font-extrabold mb-0">7</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getKunciCount ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <h6 class="text-muted font-semibold">Endpoint API</h6>
-                                    <h6 class="font-extrabold mb-0">3</h6>
+                                    <h6 class="font-extrabold mb-0"><?= $getEndpointCount ?></h6>
                                 </div>
                             </div>
                         </div>

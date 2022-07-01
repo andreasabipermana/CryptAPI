@@ -74,4 +74,46 @@ class Objek_model extends MY_Model
             }
         }
     }
+
+    function validObjekById($id)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $as  = $this->db->get();
+
+        foreach ($as->result() as $p) {
+            # code...
+            if ($id == $p->id_objek_kriptografi) {
+                return 1;
+            }
+        }
+    }
+
+    function countObjekByUser($id)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $this->db->join('{PRE}project', '{PRE}' . $this->_table_name . '.id_project  = {PRE}project.id_project');
+        $this->db->where(['{PRE}project.id_user' => $id]);
+        return $this->db->count_all_results();
+    }
+
+    function getObjek($id_user)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $this->db->select(['{PRE}' . $this->_table_name . '.id_objek_kriptografi', '{PRE}' . $this->_table_name . '.nama']);
+        $this->db->join('{PRE}project', '{PRE}' . $this->_table_name . '.id_project  = {PRE}project.id_project');
+        $this->db->where(['id_user' => $id_user]);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function getObjekEndpoint($id_user, $id_project)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $this->db->select(['{PRE}' . $this->_table_name . '.id_objek_kriptografi', '{PRE}' . $this->_table_name . '.nama']);
+        $this->db->join('{PRE}project', '{PRE}' . $this->_table_name . '.id_project  = {PRE}project.id_project');
+        $this->db->where(['{PRE}project.id_user' => $id_user]);
+        $this->db->where(['{PRE}' . $this->_table_name . '.id_project' => $id_project]);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
