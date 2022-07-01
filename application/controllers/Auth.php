@@ -10,6 +10,24 @@ class Auth extends MY_Controller
         $this->load->model("User_model");
     }
 
+    function input_error()
+    {
+        $json['status'] = 0;
+        $json['csrfHash'] = $this->security->get_csrf_hash();
+
+        $json['pesan']     = validation_errors();
+        echo json_encode($json);
+    }
+
+    function query_error($pesan = "Terjadi kesalahan, coba lagi !")
+    {
+        $json['status'] = 2;
+        $json['csrfHash'] = $this->security->get_csrf_hash();
+
+        $json['pesan']     = "<div class='alert alert-danger error_validasi'>" . $pesan . "</div>";
+        echo json_encode($json);
+    }
+
     public function login()
     {
 

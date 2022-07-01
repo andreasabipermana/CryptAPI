@@ -208,4 +208,61 @@ class Tambah extends MY_Controller
 			$this->input_error();
 		}
 	}
+
+	public function endpoint_api()
+	{
+		$this->form_validation->set_rules('id_project', 'Project', 'trim|required');
+		$this->form_validation->set_rules('nama', 'Nama Endpoint', 'trim|required');
+		$this->form_validation->set_rules('rute', 'Rute Endpoint', 'trim|required');
+		$this->form_validation->set_rules('api_key', 'Kunci API', 'trim|required');
+		$this->form_validation->set_rules('aktif', 'Aktif', 'trim|required');
+		$this->form_validation->set_message('required', '%s harus diisi !');
+		$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+		if ($this->form_validation->run() == TRUE) {
+			$api_key = $this->input->post('api_key');
+			$rute = $this->input->post('rute');
+
+			$valid = $this->Endpoint_model->validAPIkey($api_key);
+			$valid2 = $this->Endpoint_model->validRute($rute);
+			$id_user = $this->session->userdata('id');
+
+			if ($valid == 0) {
+				if ($valid2 == 0) {
+					$data = array(
+						'id_project' => $this->input->post('id_project'),
+						'nama' => htmlspecialchars($this->input->post('nama')),
+						'rute' => htmlspecialchars($this->input->post('rute')),
+						'api_key' => $this->input->post('api_key'),
+						'aktif' => $this->input->post('aktif'),
+						'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
+
+					);
+					$insert = $this->Endpoint_model->insert($data);
+
+					if ($insert) {
+						echo json_encode(array(
+							'status' => 1,
+							'csrfName' => $this->security->get_csrf_token_name(),
+							'csrfHash' => $this->security->get_csrf_hash(),
+						));
+					} else {
+						$this->query_error();
+					}
+				} else {
+					$json['status'] = 2;
+					$json['csrfHash'] = $this->security->get_csrf_hash();
+					$json['pesan'] 	= "Rute sudah terdaftar di database!";
+					echo json_encode($json);
+				}
+			} else {
+				$json['status'] = 2;
+				$json['csrfHash'] = $this->security->get_csrf_hash();
+				$json['pesan'] 	= "Kunci API sudah terdaftar di database silahkan bangkitkan ulang!";
+				echo json_encode($json);
+			}
+		} else {
+			$this->input_error();
+		}
+	}
 }

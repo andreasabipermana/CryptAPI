@@ -67,4 +67,29 @@ class Ambil extends MY_Controller
 		];
 		echo json_encode($data);
 	}
+
+	public function bangkitkanKunciAPI()
+	{
+		$hasil = bin2hex(random_bytes(32));
+		$data = [
+			'status' => 1,
+			'api_key' => $hasil
+		];
+		echo json_encode($data);
+	}
+
+
+	public function getEndpointyId($id)
+	{
+		$id = $this->encryptor->enkrip('dekrip', $id);
+		$datas = $this->Endpoint_model->get($id, FALSE);
+		$data = array(
+			'id_project' => $datas->id_project,
+			'api_key' => $datas->api_key,
+			'nama' => $datas->nama,
+			'rute' => $datas->rute,
+			'aktif' => $datas->aktif,
+		);
+		echo json_encode($data);
+	}
 }

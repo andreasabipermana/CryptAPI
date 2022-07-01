@@ -202,9 +202,10 @@ function ubah(id) {
 
 
             $('#nama_kunci').val(json.nama_kunci);
-            $('#nama_kuncilama').val(json.nama_kuncilama);
+            $('#nama_kuncilama').val(json.nama_kunci);
             $('#keterangan').val(json.keterangan);
             $('#kunci').val(json.kunci);
+            $('#kuncilama').val(json.kunci);
             $('#kode').val('1');
             $('#id_kunci').val(id);
             $('#modalTambah').modal('show');

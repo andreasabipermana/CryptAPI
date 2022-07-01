@@ -192,7 +192,7 @@ function ubah(id) {
 
 
             $('#nama').val(json.nama);
-            $('#namalama').val(json.namalama);
+            $('#namalama').val(json.nama);
             $('#keterangan').val(json.keterangan);
             $('#kode').val('1');
             $('#id_objek_kriptografi').val(id);

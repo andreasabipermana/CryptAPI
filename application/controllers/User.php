@@ -61,10 +61,12 @@ class User extends MY_Controller
 
     public function endpoint_api()
     {
+        $id_user = $this->encryptor->enkrip('dekrip', $this->session->userdata('id'));
         $data = [
             'konten' => 'endpoint_api',
             'breadcrumb' => 'endpoint_api',
-            'tabel' => 'endpoint_api'
+            'tabel' => 'endpoint_api',
+            'getNamaProject' => $this->Project_model->getProject($id_user)
         ];
         $this->load->view('user', $data);
     }

@@ -8,14 +8,14 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Project Kriptografi</h3>
-                <p class="text-subtitle text-muted">Berisi Project Kriptografi yang disimpan oleh Sistem</p>
+                <h3>Endpoint API Kriptografi</h3>
+                <p class="text-subtitle text-muted">Berisi Endpoint API yang dijalankan oleh Sistem</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item" aria-current="page">Project</li>
+                        <li class="breadcrumb-item" aria-current="page">Endpoint API</li>
                     </ol>
                 </nav>
             </div>
@@ -24,7 +24,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4 class="text-center">Daftar Project</h4>
+                <h4 class="text-center">Daftar Endpoint API</h4>
             </div>
             <br>
             <div class="card-body">
@@ -39,8 +39,9 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Nama</th>
                             <th>Nama Project</th>
-                            <th>Keterangan</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -54,9 +55,10 @@
     </section>
 </div>
 
+
 <div class="modal fade modal-borderless" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahLabel"
     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h5 class="modal-title" id="modalTambahLabel">Form <?= $breadcrumb ?></h5>
@@ -68,28 +70,63 @@
                         value="<?php echo $this->security->get_csrf_hash(); ?>" id="csrfs">
 
                     <input type="hidden" id="kode" name="kode" value="">
-                    <input type="hidden" id="id_project" name="id_project" value="">
+                    <input type="hidden" id="id_endpoint" name="id_endpoint" value="">
 
                     <div class="row">
                         <div class="col-md-12" id="error-message">
 
                         </div>
-                        <div class="col-md-12 form-group mb-4">
-                            <label>Nama Project</label>
+                        <div class="col-md-6 form-group mb-4">
+                            <label>Project</label>
+                            <select class="form-select" name="id_project" id="id_project">
+                                <option selected disabled>--Pilih Project--</option>
+                                <?php foreach ($getNamaProject as $k) { ?> <option value='<?= $k->id_project ?>'>
+                                    <?= $k->nama ?> </option> <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group mb-4">
+                            <label>Nama Endpoint</label>
                             <input type="text" class="form-control" name="nama" id="nama" onpaste="return false"
                                 autocomplete="off">
-                            <input type="hidden" id="namalama" name="namalama" value="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 form-group mb-4">
+                            <label>Kunci API</label>
+                            <input type="text" class="form-control" name="api_key" id="api_key" onpaste="return false"
+                                autocomplete="off">
+                            <input type="hidden" id="api_keylama" name="api_keylama" value="">
+
+                        </div>
+                        <div class="col-md-2 form-group mb-4">
+                            <label> </label>
+                            <button type="button" class=" form-control btn btn-info ml-1" onclick="bangkitkan()">
+                                <i class='bi bi-gear-fill'></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-4">
+                            <label>Rute Endpoint</label>
+                            <input type="text" class="form-control" name="rute" id="rute" onpaste="return false"
+                                autocomplete="off">
+                            <input type="hidden" id="rutelama" name="rutelama" value="">
                             <div class="valid-feedback" style="display: block;color:grey">
-                                Info : <span class="badge bg-light-warning">Tidak boleh nama project yang sudah
+                                Info : <span class="badge bg-light-warning">Tidak boleh rute yang sudah
                                     ada</span>
                             </div>
                         </div>
+                        <div class="col-md-6 form-group mb-4">
+                            <label>Aktif</label>
+                            <select class="form-select" name="aktif" id="aktif">
+                                <option disabled="" selected="">--Pilih Aktif--</option>
+                                <option value="1">Ya</option>
+                                <option value="2">Tidak</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="col form-group">
-                        <label>Keterangan</label>
-                        <textarea class="form-control" id="keterangan" rows="3" name="keterangan"></textarea>
-                    </div>
+
 
 
                 </form>
@@ -106,6 +143,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script type="text/javascript">
@@ -137,6 +175,9 @@ $(function() {
             orderData: [0, 1]
         }, {
             targets: [3],
+            orderData: [0, 1]
+        }, {
+            targets: [4],
             orderData: [0, 1]
         }],
 
@@ -182,17 +223,24 @@ function tambah() {
 function ubah(id) {
     $('#formTambah')[0].reset();
     $.ajax({
-        url: base + 'ambil/getProjectById/' + id,
+        url: base + 'ambil/getEndpointyId/' + id,
         type: "GET",
         dataType: "JSON",
         success: function(json) {
 
 
             $('#nama').val(json.nama);
-            $('#namalama').val(json.nama);
             $('#keterangan').val(json.keterangan);
+            $('#id_project').val(json.id_project);
+            $('#rute').val(json.rute);
+            $('#rutelama').val(json.rute);
+            $('#api_key').val(json.api_key);
+            $('#api_keylama').val(json.api_key);
+
+            $('#aktif').val(json.aktif);
             $('#kode').val('1');
-            $('#id_project').val(id);
+            $('#id_endpoint').val(id);
+
             $('#modalTambah').modal('show');
 
 
@@ -207,9 +255,9 @@ function ubah(id) {
 
 function simpan() {
     if ($('#kode').val() == 0) {
-        var url = base + 'tambah/project';
+        var url = base + 'tambah/endpoint_api';
     } else {
-        var url = base + 'ubah/project';
+        var url = base + 'ubah/endpoint_api';
     }
     $.ajax({
         url: url,
@@ -255,7 +303,7 @@ function simpan() {
 }
 
 function info(id) {
-    var url = base + 'User/objek_kriptografi/' + id;
+    var url = base + 'User/detail_endpoint_api/' + id;
     location.href = url;
 }
 
@@ -279,7 +327,7 @@ function hapus(id) {
                 }
             });
             $.ajax({
-                url: base + '/hapus/project/' + id,
+                url: base + '/hapus/endpoint_api/' + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -299,5 +347,19 @@ function hapus(id) {
         }
     })
 
+}
+
+function bangkitkan() {
+    $.ajax({
+        url: base + 'ambil/bangkitkanKunciAPI/',
+        type: "GET",
+        dataType: "JSON",
+        success: function(json) {
+            $('#api_key').val(json.api_key);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error get data from ajax');
+        }
+    });
 }
 </script>

@@ -214,4 +214,61 @@ class Ubah extends MY_Controller
             $this->input_error();
         }
     }
+
+    public function endpoint_api()
+    {
+        $this->form_validation->set_rules('id_project', 'Project', 'trim|required');
+        $this->form_validation->set_rules('nama', 'Nama Endpoint', 'trim|required');
+        $this->form_validation->set_rules('rute', 'Rute Endpoint', 'trim|required');
+        $this->form_validation->set_rules('api_key', 'Kunci API', 'trim|required');
+        $this->form_validation->set_rules('aktif', 'Aktif', 'trim|required');
+        $this->form_validation->set_message('required', '%s harus diisi !');
+        $this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+        if ($this->form_validation->run() == TRUE) {
+
+            $id = $this->input->post('id_endpoint');
+            $api_key = $this->input->post('api_key');
+            $api_keylama = $this->input->post('api_keylama');
+            $rute = $this->input->post('rute');
+            $rutelama = $this->input->post('rutelama');
+
+            $valid = $this->Endpoint_model->validAPIkey($api_key);
+            $valid2 = $this->Endpoint_model->validRute($rute);
+            $id_user = $this->session->userdata('id');
+
+            if ($rute == $rutelama || $valid2 == 0) {
+                if ($api_key == $api_keylama || $valid == 0) {
+
+                    $data = array(
+                        'id_project' => $this->input->post('id_project'),
+                        'nama' => htmlspecialchars($this->input->post('nama')),
+                        'rute' => htmlspecialchars($this->input->post('rute')),
+                        'api_key' => $this->input->post('api_key'),
+                        'aktif' => $this->input->post('aktif'),
+                        'id_user' => $this->encryptor->enkrip('dekrip', $id_user),
+
+                    );
+                    $this->Endpoint_model->update($data, ['id_endpoint' => $this->encryptor->enkrip('dekrip', $id)]);
+                    echo json_encode(array(
+                        'status' => 1,
+                        'csrfName' => $this->security->get_csrf_token_name(),
+                        'csrfHash' => $this->security->get_csrf_hash(),
+                    ));
+                } else {
+                    $json['status'] = 2;
+                    $json['csrfHash'] = $this->security->get_csrf_hash();
+                    $json['pesan']     = "KunciAPI sudah terdaftar di database!";
+                    echo json_encode($json);
+                }
+            } else {
+                $json['status'] = 2;
+                $json['csrfHash'] = $this->security->get_csrf_hash();
+                $json['pesan']     = "Rute sudah terdaftar di database!";
+                echo json_encode($json);
+            }
+        } else {
+            $this->input_error();
+        }
+    }
 }
