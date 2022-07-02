@@ -75,6 +75,19 @@ class Objek_model extends MY_Model
         }
     }
 
+    function getObjekID($nama)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $as  = $this->db->get();
+
+        foreach ($as->result() as $p) {
+            # code...
+            if ($nama == $p->nama) {
+                return $p->id_objek_kriptografi;
+            }
+        }
+    }
+
     function validObjekById($id)
     {
         $this->db->from('{PRE}' . $this->_table_name);

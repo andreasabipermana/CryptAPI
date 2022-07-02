@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-lg-10 col-9">
                                 <input type="text" id="rute" class="form-control" name="rute"
-                                    value="<?= base_url() . 'Crypt/' . $rute ?>" readonly>
+                                    value="<?= base_url() . 'Service/api/' . $rute ?>" readonly>
                             </div>
                         </div>
                     </div>

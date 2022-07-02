@@ -37,23 +37,21 @@ class Encryptor
         }
         return $output;
     }
-    function enkrip2($action, $string)
+
+    function enkrip_service($action, $string, $secret_key)
     {
         $output = false;
-        $encrypt_method = "AES-256-GCM";
-        $secret_key = '86jBkpti4n1FSoKbmSr19SdHIL4Cnbpw';
+        $encrypt_method = "AES-256-CBC";
+        $secret_key = base64_decode($secret_key);
         $secret_iv = $secret_key;
-        // hash
-        $key = hash('sha256', $secret_key);
-
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-        // $iv = substr(hash('sha256', $secret_iv), 0, 16);
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-gcm'));
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
         if ($action == 'enkrip') {
-            $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
-            $output = base64_encode($output);
+            $output = openssl_encrypt($string, $encrypt_method, $secret_key, 0, $iv);
+            // $output = base64_encode($output);
         } else if ($action == 'dekrip') {
-            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+            $output = openssl_decrypt($string, $encrypt_method, $secret_key, 0, $iv);
+            $output = base64_encode($output);
         }
         return $output;
     }

@@ -87,4 +87,53 @@ class Endpoint_model extends MY_Model
             }
         }
     }
+
+    function validEndpointReq($rute, $api_key)
+    {
+        $this->db->from('{PRE}' . $this->_table_name);
+        $this->db->where('rute', $rute);
+        $this->db->where('api_key', $api_key);
+        $this->db->where(['aktif' => 1]);
+        $this->db->limit(1);
+        return $this->db->get();
+    }
+
+    function getEndpointbyAPIKey($api_key, $id_objek_kriptografi)
+    {
+        // $this->db->from('{PRE}' . $this->_table_name);
+        // $this->db->join('{PRE}detail_endpoint', '{PRE}' . $this->_table_name . '.id_endpoint  = {PRE}detail_endpoint.id_endpoint');
+        // $this->db->where(['{PRE}' . $this->_table_name . '.api_key' => $api_key]);
+        // $this->db->where(['{PRE}' . $this->_table_name . '.id_project' => ]);
+        $sql = "
+            SELECT 
+            a.`id_endpoint`,
+            a.`id_project`,
+            d.`id_objek_kriptografi`,
+            a.`id_user`,
+            d.`nama` AS nama_objek,
+            a.`nama`,
+            a.`api_key`,
+            a.`rute`,
+            c.`kunci`
+
+            FROM
+            `tb_endpoint` as a,
+            `tb_detail_endpoint` as b,
+            `tb_kunci` as c,
+            `tb_objek_kriptografi` as d
+
+            WHERE 
+            a.`id_endpoint`=b.`id_endpoint` AND
+            b.`id_kunci`=c.`id_kunci` AND
+            d.`id_objek_kriptografi`=b.`id_objek_kriptografi` AND
+            a.`api_key` = ? AND
+            b.`id_objek_kriptografi` = ?
+
+           
+        
+        
+        ";
+        $query = $this->db->query($sql, [$api_key, $id_objek_kriptografi]);
+        return $query->row_array();
+    }
 }

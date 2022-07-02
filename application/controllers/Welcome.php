@@ -19,10 +19,18 @@ class Welcome extends MY_Controller
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
-	public function index()
+	public function index($plain = NULL)
 	{
-		// $this->load->view('welcome_message');
-		$key = bin2hex(random_bytes(32));
-		echo $key;
+		$this->load->model('Endpoint_model');
+		$abi = $this->Endpoint_model->getEndpointbyAPIKey('NfqRXaC8vwwxB0gt1CKPXtPJrO3fx1OG', 3);
+		var_dump($abi);
+		echo $abi['id_endpoint'];
+		// $hasil = $this->encryptor->enkrip_service('enkrip', $plain, $abi['kunci']);
+		// echo 'Hasil Enkrip : ' . $hasil;
+		// echo '<br>';
+		// $dekrip = $this->encryptor->enkrip_service('dekrip', $hasil, $abi['kunci']);
+		// echo 'Hasil Dekrip : ' . $dekrip;
+		// echo '<br>';
+		// echo date('Y-m-d H:i:s');
 	}
 }

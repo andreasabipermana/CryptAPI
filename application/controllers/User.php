@@ -53,7 +53,7 @@ class User extends MY_Controller
     {
         $data = [
             'konten' => 'kunci',
-            'breadcrumb' => 'kunci',
+            'breadcrumb' => 'Kunci',
             'tabel' => 'kunci'
         ];
         $this->load->view('user', $data);
@@ -64,7 +64,7 @@ class User extends MY_Controller
         $id_user = $this->encryptor->enkrip('dekrip', $this->session->userdata('id'));
         $data = [
             'konten' => 'endpoint_api',
-            'breadcrumb' => 'endpoint_api',
+            'breadcrumb' => 'Endpoint API',
             'tabel' => 'endpoint_api',
             'getNamaProject' => $this->Project_model->getProject($id_user)
         ];
@@ -99,9 +99,19 @@ class User extends MY_Controller
 
     public function statistik_akses()
     {
+        $data = [
+            'konten' => 'statistik_akses',
+            'breadcrumb' => 'Statistik Akses',
+            'tabel' => 'statistik_akses'
+        ];
+        $this->load->view('user', $data);
     }
 
     public function grafik_statistik($param = NULL)
     {
+        if ($this->uri->segment(2) == 'grafik_statistik' && $this->uri->segment(3) != '') {
+        } else {
+            redirect(base_url("User/endpoint_api"));
+        }
     }
 }

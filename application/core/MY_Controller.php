@@ -10,7 +10,7 @@ class MY_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->load->helper(['text', 'url', 'date', 'form']);
-		$this->load->library(['session', 'encryption', 'encryptor', 'site', 'form_validation']);
+		$this->load->library(['session', 'encryption', 'encryptor', 'site', 'form_validation', 'user_agent']);
 		date_default_timezone_set("Asia/Jakarta");
 		$this->load->database();
 		$this->site->is_logged_in();
