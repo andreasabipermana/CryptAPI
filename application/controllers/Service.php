@@ -30,6 +30,10 @@ class Service extends MY_Controller
                         $plaintext = $input['plaintext'];
                         $plaintext = base64_decode($plaintext);
                         $hasil = $this->encryptor->enkrip_service('enkrip', $plaintext, $data['kunci']);
+                        $user_agent = $this->agent->agent_string();
+                        if (empty($user_agent)) {
+                            $user_agent = 'Unknown';
+                        }
 
                         $statistik =  [
                             'id_endpoint' => $data['id_endpoint'],
@@ -37,11 +41,10 @@ class Service extends MY_Controller
                             'aksi' => $input['aksi'],
                             'waktu' => date('Y-m-d H:i:s'),
                             'ip_address' => $_SERVER['REMOTE_ADDR'],
-                            'user_agent' => $this->agent->agent_string()
+                            'user_agent' => $user_agent
                         ];
 
                         $this->Statistik_model->insert($statistik);
-
 
                         $output = [
                             'status' => 'Sukses',
@@ -49,18 +52,25 @@ class Service extends MY_Controller
                             'ciphertext' => $hasil
 
                         ];
+
                         echo json_encode($output);
                     } else if ($input['aksi'] == 'dekrip' && isset($input['ciphertext'])) {
                         $ciphertext = $input['ciphertext'];
                         $hasil = $this->encryptor->enkrip_service('dekrip', $ciphertext, $data['kunci']);
+                        if (empty($user_agent)) {
+                            $user_agent = 'Unknown';
+                        }
+
                         $statistik =  [
                             'id_endpoint' => $data['id_endpoint'],
                             'objek' => $data['nama_objek'],
                             'aksi' => $input['aksi'],
                             'waktu' => date('Y-m-d H:i:s'),
                             'ip_address' => $_SERVER['REMOTE_ADDR'],
-                            'user_agent' => $this->agent->agent_string()
+                            'user_agent' => $user_agent
                         ];
+
+
 
                         $this->Statistik_model->insert($statistik);
                         $output = [

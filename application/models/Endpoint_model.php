@@ -62,6 +62,55 @@ class Endpoint_model extends MY_Model
         return $data;
     }
 
+    function gen_tabel2($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL, $id_user)
+    {
+        $id_user = $this->encryptor->enkrip('dekrip', $id_user);
+
+        $sql = "
+            SELECT 
+            
+            (@row:=@row+1) AS nomor,
+            a.`id_endpoint`,
+            b.`nama` AS nama_project,
+            a.`nama`,
+            a.`aktif`
+
+            FROM 
+            `tb_endpoint` as a,
+            `tb_project` as b
+            , (SELECT @row := 0) r WHERE 1=1 AND a.`id_project`= b.`id_project` AND a.`id_user`=" . $id_user . "
+            ";
+
+        $data['totalData'] = $this->db->query($sql)->num_rows();
+
+        if (!empty($like_value)) {
+            $sql .= " AND ( ";
+            $sql .= "
+		 a.`nama` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
+		 OR b.`nama_project` LIKE '%" . $this->db->escape_like_str($like_value) . "%' 
+		 
+		 ";
+            $sql .= " ) ";
+        }
+
+        $data['totalFiltered']    = $this->db->query($sql)->num_rows();
+
+        $columns_order_by = array(
+
+            0 => 'nomor',
+            1 => 'a.`nama`',
+            2 => 'b.`nama_project`',
+            3 => 'a.`aktif`',
+
+        );
+
+        $sql .= " ORDER BY " . $columns_order_by[$column_order] . " " . $column_dir . ", nomor ";
+        $sql .= " LIMIT " . $limit_start . " ," . $limit_length . " ";
+
+        $data['query'] = $this->db->query($sql);
+        return $data;
+    }
+
     function validAPIkey($api_key)
     {
         $this->db->from('{PRE}' . $this->_table_name);

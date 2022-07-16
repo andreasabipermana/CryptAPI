@@ -7,7 +7,7 @@ class Ambil extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
+		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model', 'Statistik_model']);
 	}
 
 	public function getUserById($id)
@@ -104,5 +104,54 @@ class Ambil extends MY_Controller
 			'id_kunci' => $datas->id_kunci,
 		);
 		echo json_encode($data);
+	}
+
+	public function getStatistikPerHari($method)
+	{
+		if ($method == 'enkrip') {
+			$data = $this->site->be_array($this->Statistik_model->perHariEnkrip());
+			echo json_encode(
+				$data
+			);
+		} else if ($method == 'dekrip') {
+
+			$data = $this->site->be_array($this->Statistik_model->perHariDekrip());
+			echo json_encode(
+				$data
+			);
+		}
+	}
+
+	public function getStatistikPerHariById($id, $method)
+	{
+		$id_endpoint = $this->encryptor->enkrip('dekrip', $id);
+		if ($method == 'enkrip') {
+			$data = $this->site->be_array($this->Statistik_model->perHariEnkripById($id_endpoint));
+			echo json_encode(
+				$data
+			);
+		} else if ($method == 'dekrip') {
+
+			$data = $this->site->be_array($this->Statistik_model->perHariDekripById($id_endpoint));
+			echo json_encode(
+				$data
+			);
+		}
+	}
+
+	public function getStatistikPerHariByUser($id, $method)
+	{
+		$id_user = $this->encryptor->enkrip('dekrip', $id);
+		if ($method == 'enkrip') {
+			$data = $this->site->be_array($this->Statistik_model->perHariEnkripByUser($id_user));
+			echo json_encode(
+				$data
+			);
+		} else if ($method == 'dekrip') {
+			$data = $this->site->be_array($this->Statistik_model->perHariDekripByUser($id_user));
+			echo json_encode(
+				$data
+			);
+		}
 	}
 }

@@ -44,8 +44,8 @@
                         <li class="sidebar-title">Menu</li>
 
                         <li class="sidebar-item <?= $this->uri->segment(2) == '' ? 'active' : '' ?> ">
-                            <a href="index.html" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                            <a href="<?= base_url() ?>Admin/"" class='sidebar-link'>
+                                <i class=" bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
@@ -55,9 +55,10 @@
                                 <span>User</span>
                             </a>
                         </li>
-                        <li class="sidebar-item   <?= $this->uri->segment(2) == 'statistik_user' ? 'active' : '' ?> ">
-                            <a href="index.html" class='sidebar-link'>
-                                <i class="bi bi-graph-up"></i>
+                        <li
+                            class="sidebar-item   <?= $this->uri->segment(2) == 'statistik_user' || $this->uri->segment(2) == 'endpoint_statistik_user' || $this->uri->segment(2) == 'grafik_statistik_user'  ? 'active' : '' ?> ">
+                            <a href="<?= base_url() ?>Admin/statistik_user"" class='sidebar-link'>
+                                <i class=" bi bi-graph-up"></i>
                                 <span>Statistik User</span>
                             </a>
                         </li>

@@ -78,13 +78,23 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-7">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-header">
                             <h4></h4>
                         </div>
                         <div class="card-body">
                             <div id="chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4></h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart1"></div>
                         </div>
                     </div>
                 </div>
@@ -95,28 +105,66 @@
     </section>
 </div>
 <script>
+var base = '<?= base_url() ?>'
 var options = {
     chart: {
         type: 'area'
     },
     title: {
-        text: 'Statistik Harian API',
+        text: 'Statistik API Enkrip',
         align: 'left'
     },
-    subtitle: {
-        text: 'Projek Absensi Karyawan',
-        align: 'left'
+
+    series: [],
+    noData: {
+        text: 'Loading...'
     },
-    series: [{
-        name: 'karyawan',
-        data: [46, 45, 67, 53, 77, 44]
-    }],
     xaxis: {
-        categories: ['1 Juni', '2 Juni', '3 Juni', '4 Juni', '5 Juni', '6 Juni']
+        type: 'category'
+    }
+
+}
+
+var options1 = {
+    chart: {
+        type: 'area'
+    },
+    title: {
+        text: 'Statistik API Dekrip ',
+        align: 'left'
+    },
+
+    series: [],
+    noData: {
+        text: 'Loading...'
+    },
+    xaxis: {
+        type: 'category'
     }
 }
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
+var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+
 
 chart.render();
+chart1.render();
+
+var url_enkrip = base + 'Ambil/getStatistikPerHari/enkrip';
+
+$.getJSON(url_enkrip, function(response) {
+    chart.updateSeries([{
+        name: 'Enkrip',
+        data: response
+    }])
+});
+
+var url_dekrip = base + 'Ambil/getStatistikPerHari/dekrip';
+
+$.getJSON(url_dekrip, function(response) {
+    chart1.updateSeries([{
+        name: 'Dekrip',
+        data: response
+    }])
+});
 </script>

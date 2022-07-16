@@ -7,7 +7,7 @@ class Tabel extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model']);
+		$this->load->model(['Project_model', 'Objek_model', 'Kunci_model', 'Endpoint_model', 'User_model', 'Endpoint_detail_model', 'Statistik_model']);
 	}
 
 
@@ -294,6 +294,126 @@ class Tabel extends MY_Controller
 			$data[] = $nestedData;
 		}
 
+		$json_data = array(
+			"draw"            => intval($requestData['draw']),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $data
+		);
+
+		echo json_encode($json_data);
+	}
+
+	public function log_akses($id_endpoint)
+	{
+
+		$requestData	= $_REQUEST;
+		$fetch			= $this->Statistik_model->gen_tabel($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length'], $id_endpoint);
+
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		$no = 1;
+		foreach ($query->result_array() as $row) {
+			$nestedData = array();
+
+			$nestedData[]	= $row['nomor'];
+			$nestedData[]	= $row['objek'];
+			$nestedData[]	= $row['aksi'];
+			$nestedData[]	= $row['ip_address'];
+			$nestedData[]	= $row['user_agent'];
+			$data[] = $nestedData;
+		}
+
+		$json_data = array(
+			"draw"            => intval($requestData['draw']),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $data
+		);
+
+		echo json_encode($json_data);
+	}
+
+	public function statistik_user()
+	{
+		$requestData	= $_REQUEST;
+		$fetch			= $this->User_model->gen_tabel2($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length']);
+
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		$no = 1;
+		foreach ($query->result_array() as $row) {
+
+			$nestedData = array();
+
+
+			if ($row['aktif'] == 1) {
+				$aktif = "<span class=\"badge bg-success\">Active</span>";
+			} else {
+				$aktif = "<span class=\"badge bg-danger\">Disabled</span>";
+			}
+
+			$nestedData[]	= $row['nomor'];
+
+			$nestedData[]	= $row['nama'];
+			$nestedData[]	= $row['username'];
+			$nestedData[]	= $aktif;
+			$id = $this->encryptor->enkrip('enkrip', $row['id_user']);
+			$nestedData[]	= "
+            <button onclick=\"info('" . $id . "')\" class='btn icon btn-info'><i class='bi bi-info-circle'></i></button>";
+
+			$data[] = $nestedData;
+		}
+
+		$json_data = array(
+			"draw"            => intval($requestData['draw']),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $data
+		);
+
+		echo json_encode($json_data);
+	}
+
+	public function endpoint_statistik_user($id_user = NULL)
+	{
+		$requestData	= $_REQUEST;
+		$fetch			= $this->Endpoint_model->gen_tabel2($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length'], $id_user);
+
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		$no = 1;
+		foreach ($query->result_array() as $row) {
+
+
+			if ($row['aktif'] == 1) {
+				$aktif = "<span class=\"badge bg-success\">Active</span>";
+			} else {
+				$aktif = "<span class=\"badge bg-danger\">Disabled</span>";
+			}
+
+			$nestedData = array();
+
+			$nestedData[]	= $row['nomor'];
+
+			$nestedData[]	= $row['nama'];
+			$nestedData[]	= $row['nama_project'];
+			$nestedData[]	= $aktif;
+			$id = $this->encryptor->enkrip('enkrip', $row['id_endpoint']);
+			$nestedData[]	= "
+            <button onclick=\"info('" . $id . "')\" class='btn icon btn-info'><i class='bi bi-graph-up'></i></button>";
+
+			$data[] = $nestedData;
+		}
 		$json_data = array(
 			"draw"            => intval($requestData['draw']),
 			"recordsTotal"    => intval($totalData),

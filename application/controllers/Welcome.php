@@ -19,18 +19,23 @@ class Welcome extends MY_Controller
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
-	public function index($plain = NULL)
+	public function index()
 	{
-		$this->load->model('Endpoint_model');
-		$abi = $this->Endpoint_model->getEndpointbyAPIKey('NfqRXaC8vwwxB0gt1CKPXtPJrO3fx1OG', 3);
-		var_dump($abi);
-		echo $abi['id_endpoint'];
-		// $hasil = $this->encryptor->enkrip_service('enkrip', $plain, $abi['kunci']);
-		// echo 'Hasil Enkrip : ' . $hasil;
+
+		$this->load->library('cryptapi');
+		// $hasil =  $this->encryptor->enkrip_service('enkrip', 'andreasabipermana', 'TUJDPwu3gZVlrx1L2\/xFIB7\/kKi9IV2DTZZccZtTgLg=');
+		// echo $hasil;
 		// echo '<br>';
-		// $dekrip = $this->encryptor->enkrip_service('dekrip', $hasil, $abi['kunci']);
-		// echo 'Hasil Dekrip : ' . $dekrip;
+		// $hasil = $this->encryptor->enkrip_service('dekrip', $hasil, 'TUJDPwu3gZVlrx1L2/xFIB7/kKi9IV2DTZZccZtTgLg=');;
+		// echo $hasil;
+
 		// echo '<br>';
-		// echo date('Y-m-d H:i:s');
+		// echo '<br>';
+
+		$hasil =  $this->cryptapi->enkrip(base64_encode('andreasabipermana'), 'Karyawan');
+		echo $hasil;
+		// echo '<br>';
+		// $hasil = $this->cryptapi->dekrip($hasil['ciphertext'], 'Karyawan');
+		// echo $hasil['plaintext'];
 	}
 }

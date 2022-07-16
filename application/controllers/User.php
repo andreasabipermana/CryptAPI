@@ -107,9 +107,23 @@ class User extends MY_Controller
         $this->load->view('user', $data);
     }
 
-    public function grafik_statistik($param = NULL)
+    public function grafik_statistik($id = NULL)
     {
         if ($this->uri->segment(2) == 'grafik_statistik' && $this->uri->segment(3) != '') {
+            $endpoint_api = $this->Endpoint_model->get($this->encryptor->enkrip('dekrip', $id), FALSE);
+            // $id_user = $this->encryptor->enkrip('dekrip', $this->session->userdata('id'));
+            $id_project = $endpoint_api->id_project;
+            $project = $this->Project_model->get($id_project, FALSE);
+            $data = [
+                'konten' => 'grafik_statistik',
+                'breadcrumb' => 'Detail Statistik Endpoint API',
+                'breadcrumb2' => 'Log Akses',
+                'tabel' => 'log_akses',
+                'id_endpoint' => $id,
+                'nama_project' => $project->nama
+
+            ];
+            $this->load->view('user', $data);
         } else {
             redirect(base_url("User/endpoint_api"));
         }

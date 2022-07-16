@@ -43,6 +43,7 @@ class Encryptor
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = base64_decode($secret_key);
+
         $secret_iv = $secret_key;
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
@@ -51,7 +52,7 @@ class Encryptor
             // $output = base64_encode($output);
         } else if ($action == 'dekrip') {
             $output = openssl_decrypt($string, $encrypt_method, $secret_key, 0, $iv);
-            $output = base64_encode($output);
+            // $output = base64_encode($output);
         }
         return $output;
     }
