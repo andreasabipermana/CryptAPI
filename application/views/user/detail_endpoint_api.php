@@ -207,10 +207,10 @@
                 </ol>
                 <p>&nbsp;</p>
                 <div class="button">
-                    <a href="<?= base_url(); ?>assets/library/cryptapi.zip" class="btn btn-success">Download
+                    <a href="<?= base_url(); ?>assets/library/Cryptapi.zip" class="btn btn-success">Download
                         Library</a>
                     <a href="https://documenter.getpostman.com/view/8388571/VUjQmPpd" target="_blank"
-                        class="btn btn-primary float-end" onclick="tambah()">Akses
+                        class="btn btn-primary float-end">Akses
                         Dokumentasi</a>
                 </div>
 
