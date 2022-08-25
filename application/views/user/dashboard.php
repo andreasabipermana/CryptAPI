@@ -117,7 +117,7 @@ var options = {
 
     series: [],
     noData: {
-        text: 'Loading...'
+        text: 'Belum ada data'
     },
     xaxis: {
         type: 'category'
@@ -136,7 +136,7 @@ var options1 = {
 
     series: [],
     noData: {
-        text: 'Loading...'
+        text: 'Belum ada data'
     },
     xaxis: {
         type: 'category'
@@ -150,7 +150,7 @@ var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
 chart.render();
 chart1.render();
 
-var url_enkrip = base + 'Ambil/getStatistikPerHari/enkrip';
+var url_enkrip = base + 'Ambil/getStatistikPerHariByUser/enkrip';
 
 $.getJSON(url_enkrip, function(response) {
     chart.updateSeries([{
@@ -159,7 +159,7 @@ $.getJSON(url_enkrip, function(response) {
     }])
 });
 
-var url_dekrip = base + 'Ambil/getStatistikPerHari/dekrip';
+var url_dekrip = base + 'Ambil/getStatistikPerHariByUser/dekrip';
 
 $.getJSON(url_dekrip, function(response) {
     chart1.updateSeries([{

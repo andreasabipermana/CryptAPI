@@ -278,7 +278,7 @@ class Tambah extends MY_Controller
 
 			$valid = $this->Objek_model->validObjekById($id_objek_kriptografi);
 
-			if ($valid == 0) {
+			if ($valid == 1) {
 				$data = array(
 					'id_endpoint' => $this->encryptor->enkrip('dekrip', $this->input->post('id_endpoint')),
 					'id_objek_kriptografi' => $this->input->post('id_objek_kriptografi'),
@@ -298,7 +298,7 @@ class Tambah extends MY_Controller
 			} else {
 				$json['status'] = 2;
 				$json['csrfHash'] = $this->security->get_csrf_hash();
-				$json['pesan'] 	= "Objek sudah terdaftar di database!";
+				$json['pesan'] 	= "Objek tidak terdaftar di database!";
 				echo json_encode($json);
 			}
 		} else {

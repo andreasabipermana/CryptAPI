@@ -58,7 +58,10 @@
                 </div>
                 <br>
                 <div class="button">
-                    <a href="javascript:void(0)" class="btn btn-primary float-end" onclick="tambah()">Tambah Data</a>
+                    <a href="javascript:void(0)" class="btn btn-success" onclick="dokumen()">Dokumentasi</a>
+
+                    <a href="javascript:void(0)" class="btn btn-primary float-end" onclick="tambah()">Tambah
+                        Data</a>
                 </div>
 
                 <br>
@@ -147,6 +150,84 @@
     </div>
 </div>
 
+<div class="modal fade modal-borderless" id="modalDokumen" tabindex="-1" aria-labelledby="modalDokumenLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">
+                    <strong>Dokumentasi Penggunaan API</strong>
+                </p>
+                <br>
+
+                <ol>
+                    <li>Gunakan tautan endpoint api untuk melakukan akses.</li>
+                    <li>Siapkan API Key dan nama Objek Kriptografi.</li>
+                    <li>Download Library Codeigniter 3 pada tombol dibawah.</li>
+                    <li>Simpan Library dalam folder application/library.</li>
+                    <li>Buka file CryptAPI.php ubah endpoint dan API Key.</li>
+                    <div>
+                        <div>
+                            <code>
+                                protected $_endpoint = 'URL_ENDPOINT';<br>
+                                protected $_api_key = 'API-KEY';<br>
+                            </code>
+                        </div>
+                    </div>
+                    <li>Load library dengan perintah
+                        <div>
+                            <div>
+                                <code>$this-&gt;load-&gt;library('cryptapi');</code>
+
+                            </div>
+                        </div>
+                    </li>
+                    <li>Untuk melakukan enkripsi data di encoding ke base64 terlebih dahulu baru dilakukan enkripsi.
+                        Contoh&nbsp;
+                        <div>
+                            <div><code>$v1 = &nbsp;base64_encode($this-&gt;input-&gt;post('v1', TRUE));</code></div>
+                            <div><code>$v1 = $this-&gt;cryptapi-&gt;enkrip($v1, 'Objek');</code></div>
+                        </div>
+                    </li>
+                    <li>Untuk melakukan dekripsi gunakan kode berikut.
+                        <div>
+                            <div>
+                                <code>$v1 = $this-&gt;cryptapi-&gt;enkrip($v1, 'Objek');</code>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        Format data JSON dan cara pengaksesan API secara manual dapat dilihat pada dokumentasi Postman
+                        pada tombol dibawah
+                    </li>
+                </ol>
+                <p>&nbsp;</p>
+                <div class="button">
+                    <a href="<?= base_url(); ?>assets/library/cryptapi.zip" class="btn btn-success">Download
+                        Library</a>
+                    <a href="https://documenter.getpostman.com/view/8388571/VUjQmPpd" target="_blank"
+                        class="btn btn-primary float-end" onclick="tambah()">Akses
+                        Dokumentasi</a>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+                    Tutup
+                </button>
+                <!-- <button type="button" class="btn btn-primary ml-1" onclick="simpan()">
+                    Simpan
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 var tabel = '<?= $tabel ?>';
 var breadcrumb = '<?= $breadcrumb ?>';
@@ -223,6 +304,11 @@ function tambah() {
 
     console.log('success')
     console.log($kode)
+}
+
+function dokumen() {
+
+    $("#modalDokumen").modal('show')
 }
 
 function ubah(id) {

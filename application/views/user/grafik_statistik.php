@@ -5,7 +5,7 @@
 </header>
 
 <div class="page-heading">
-    <h3>Statistik Akses Project Absensi Karyawan</h3>
+    <h3>Statistik Akses Project <?= $nama_project ?></h3>
 </div>
 <div class="page-content">
     <section class="row">

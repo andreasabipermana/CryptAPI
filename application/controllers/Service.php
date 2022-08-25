@@ -12,6 +12,7 @@ class Service extends MY_Controller
 
     public function index()
     {
+        echo "Access Forbidden";
     }
 
     public function api($request = NULL)
@@ -80,10 +81,9 @@ class Service extends MY_Controller
 
                         ];
                         echo json_encode($output);
-                    } else if (!isset($input['ciphertext']) || !isset($input['plaintext'])) {
-                        $json['pesan'] = "Parameter proses enkripsi tidak ditemukan";
                     } else {
-                        $json['pesan'] = "Aksi tidak ditemukan";
+                        $json['pesan'] = "Parameter proses enkripsi tidak lengkap";
+                        echo json_encode($json);
                     }
                 } else {
                     $json['pesan']     = "Objek tidak ditemukan";

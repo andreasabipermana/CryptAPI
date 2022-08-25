@@ -22,20 +22,6 @@ class Welcome extends MY_Controller
 	public function index()
 	{
 
-		$this->load->library('cryptapi');
-		// $hasil =  $this->encryptor->enkrip_service('enkrip', 'andreasabipermana', 'TUJDPwu3gZVlrx1L2\/xFIB7\/kKi9IV2DTZZccZtTgLg=');
-		// echo $hasil;
-		// echo '<br>';
-		// $hasil = $this->encryptor->enkrip_service('dekrip', $hasil, 'TUJDPwu3gZVlrx1L2/xFIB7/kKi9IV2DTZZccZtTgLg=');;
-		// echo $hasil;
-
-		// echo '<br>';
-		// echo '<br>';
-
-		$hasil =  $this->cryptapi->enkrip(base64_encode('andreasabipermana'), 'Karyawan');
-		echo $hasil;
-		// echo '<br>';
-		// $hasil = $this->cryptapi->dekrip($hasil['ciphertext'], 'Karyawan');
-		// echo $hasil['plaintext'];
+		echo $this->encryptor->enkrip('dekrip','Q1ZmSnZDVHpNeFJTN09DOS83TUdXdz09');
 	}
 }

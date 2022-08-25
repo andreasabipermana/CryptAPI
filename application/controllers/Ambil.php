@@ -139,9 +139,9 @@ class Ambil extends MY_Controller
 		}
 	}
 
-	public function getStatistikPerHariByUser($id, $method)
+	public function getStatistikPerHariByUser($method)
 	{
-		$id_user = $this->encryptor->enkrip('dekrip', $id);
+		$id_user = $this->encryptor->enkrip('dekrip', $this->session->userdata('id'));
 		if ($method == 'enkrip') {
 			$data = $this->site->be_array($this->Statistik_model->perHariEnkripByUser($id_user));
 			echo json_encode(

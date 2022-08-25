@@ -108,7 +108,7 @@ class Ubah extends MY_Controller
             $id_user = $this->session->userdata('id');
             $nama = $this->input->post('nama');
             $namalama = $this->input->post('namalama');
-            $valid = $this->Project_model->validProject($namalama);
+            $valid = $this->Project_model->validProject($nama);
 
             if ($nama == $namalama || $valid == 0) {
 
@@ -147,7 +147,7 @@ class Ubah extends MY_Controller
             $id_project = $this->input->post('id_project');
             $nama = $this->input->post('nama');
             $namalama = $this->input->post('namalama');
-            $valid = $this->Objek_model->validObjek($namalama);
+            $valid = $this->Objek_model->validObjek($nama);
 
             if ($nama == $namalama || $valid == 0) {
 
@@ -186,7 +186,7 @@ class Ubah extends MY_Controller
             $id = $this->input->post('id_kunci');
             $kunci = $this->input->post('kunci');
             $kuncilama = $this->input->post('kuncilama');
-            $valid = $this->Kunci_model->validKunci($kuncilama);
+            $valid = $this->Kunci_model->validKunci($kunci);
             $id_user = $this->session->userdata('id');
 
             if ($kunci == $kuncilama || $valid == 0) {
