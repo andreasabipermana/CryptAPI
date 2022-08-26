@@ -17,15 +17,19 @@ class Site
         } else if ($_this->uri->segment(1) == ''  && isset($user_session['level'])) {
             if ($user_session['level'] == 'User') {
                 redirect(base_url("User"));
+                
             } else if ($user_session['level'] == 'Admin') {
                 redirect(base_url("Admin"));
-            } else {
             }
-        } else if ($_this->uri->segment(1) == 'Admin'  && $user_session['level'] != 'Admin') {
+            else {
+
+            }
+        } else if ($_this->uri->segment(1) == 'Admin'  && !isset($user_session['level'])) {
             redirect(base_url("Auth/login"));
-        } else if ($_this->uri->segment(1) == 'User'  && $user_session['level'] != 'User') {
+        } else if ($_this->uri->segment(1) == 'User'  && !isset($user_session['level'])) {
             redirect(base_url("Auth/login"));
         }
+
 
         if ($_this->uri->segment(1) == 'Ambil' || $_this->uri->segment(1) == 'Ubah' || $_this->uri->segment(1) == 'Tambah' || $_this->uri->segment(1) == 'Hapus' ||  $_this->uri->segment(1) == 'Tabel') {
             if ($user_session['level'] != 'User' && $user_session['level'] != 'Admin') {

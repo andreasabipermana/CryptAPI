@@ -86,7 +86,7 @@ class Auth extends MY_Controller
         $this->session->unset_userdata('username');
         $this->session->unset_userdata('level');
         $this->session->sess_destroy();
-        session_destroy();
+        
         redirect('Auth/login');
     }
 }
