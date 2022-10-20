@@ -15,3 +15,6 @@ Digunakan untuk melakukan proses kriptografi menggunakan API.
 
 ## Pustaka
 Tersedia juga pustaka untuk koneksi menggunakan framework Codeigniter 3 pada direktori /asset/library/cryptapi.zip
+
+## Tampilan
+![Tampilan CryptAPI](cryptapi.png "Tampilan CryptAPI")
