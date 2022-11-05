@@ -18,3 +18,8 @@ Tersedia juga pustaka untuk koneksi menggunakan framework Codeigniter 3 pada dir
 
 ## Tampilan
 ![Tampilan CryptAPI](cryptapi.png "Tampilan CryptAPI")
+
+## Live Demo
+* Tautan :[https://cryptapi.abipermana.my.id/](https://cryptapi.abipermana.my.id/User)
+* Login Administrator `abi` dan pass `123` 
+* Login Pengguna `reza` dan pass `123` 
