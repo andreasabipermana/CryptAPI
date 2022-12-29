@@ -10,7 +10,7 @@ class Masuk extends MY_Controller
 
 	public function login()
 	{
-		if()
+		if($this->input->is_ajax_request())
 		{
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('username','Username','trim|required|min_length[3]|max_length[40]');
